@@ -1,9 +1,13 @@
 // assets
 import { IconKey } from '@tabler/icons';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 // constant
 const icons = {
   IconKey
+};
+const material = {
+  AddShoppingCartIcon
 };
 
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
@@ -14,10 +18,10 @@ const purchase = {
   type: 'group',
   children: [
     {
-      id: 'view-purchase',
+      id: 'authentication',
       title: 'Purchase',
       type: 'collapse',
-      icon: icons.IconKey,
+      icon: material.AddShoppingCartIcon,
 
       children: [
         {
@@ -25,14 +29,14 @@ const purchase = {
           title: 'New Purchase',
           type: 'item',
           url: '/mpurchase/view-purchase',
-          target: true
+        
         },
         {
-          id: 'register3',
-          title: 'New Purchase',
+          id: 'view-purchase-return',
+          title: 'Purchase Return',
           type: 'item',
-          url: '/mpurchase/view-purchase',
-          target: true
+          url: '/mpurchase/view-purchase-return',
+         
         }
       ]
     }

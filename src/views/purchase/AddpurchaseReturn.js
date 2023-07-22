@@ -22,7 +22,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { useEffect } from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DatePicker } from '@mui/x-date-pickers';
 const TableComponent = () => {
   const [rows, setRows] = useState([
     // Initial data with an empty row
@@ -32,7 +32,7 @@ const TableComponent = () => {
       Batch: '',
       ExpDate: '',
       Qty: '0',
-     
+      
       Discount: '0',
       PPrice: '0',
       SPrice: '',
@@ -148,8 +148,9 @@ const TableComponent = () => {
             </Select>
           </FormControl>
 
+
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker label={'Bill Date'}/>
+            <DatePicker label={'Bill Date'} size="small" />
           </LocalizationProvider>
         </Stack>
         <TableContainer component={Paper}>
@@ -217,7 +218,7 @@ const TableComponent = () => {
                     />
                   </TableCell>
                  
-                  
+                 
                   <TableCell>
                     <TextField
                       variant="outlined"

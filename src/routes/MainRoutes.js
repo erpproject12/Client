@@ -18,7 +18,21 @@ const ViewParty = Loadable(lazy(() => import('views/party/ViewParty')));
 const UpdateParty = Loadable(lazy(() => import('views/party/UpdateParty')));
 const SingleParty = Loadable(lazy(() => import('views/party/SingleParty')));
 
-const ViewPurchase = Loadable(lazy(() => import('views/purchase/Viewpurchase')));
+const Addpurchase = Loadable(lazy(() => import('views/purchase/Addpurchase')));
+const Viewpurchase = Loadable(lazy(() => import('views/purchase/Viewpurchase')));
+const AddpurchaseReturn = Loadable(lazy(() => import('views/purchase/AddpurchaseReturn')));
+const ViewpurchaseReturn = Loadable(lazy(() => import('views/purchase/ViewpurchaseReturn')));
+// const Updatepurchase = Loadable(lazy(() => import('views/purchase/Updatepurchase')));
+
+
+
+
+const Addsales = Loadable(lazy(() => import('views/sales/Addsales')));
+const Viewsales = Loadable(lazy(() => import('views/sales/Viewsales')));
+const AddsalesReturn = Loadable(lazy(() => import('views/sales/AddsalesReturn')));
+const ViewsalesReturn = Loadable(lazy(() => import('views/sales/ViewsalesReturn')));
+// const Updatepurchase = Loadable(lazy(() => import('views/purchase/Updatepurchase')));
+
 
 // utilities routing
 const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
@@ -91,28 +105,60 @@ const MainRoutes = {
         }
       ]
     },
-   
     {
       path: 'mpurchase',
       children: [
         {
+          path: 'add-purchase',
+          element: <Addpurchase />
+        },
+        {
           path: 'view-purchase',
-          element: <ViewPurchase />
+          element: <Viewpurchase />
+        },
+        {
+          path: 'add-purchase-return',
+          element: <AddpurchaseReturn />
+        },
+        {
+          path: 'view-purchase-return',
+          element: <ViewpurchaseReturn />
         }
+        // ,
         // {
-        //   path: 'view-party',
-        //   element: <ViewParty />
-        // },
-        // {
-        //   path: 'update-party/:id',
-        //   element: <UpdateParty />
-        // },
-        // {
-        //   path: 'single-party/:id',
-        //   element: <SingleParty />
+        //   path: 'update-purchase/:id',
+        //   element: <Updatepurchase />
         // }
       ]
     },
+   
+    {
+      path: 'msales',
+      children: [
+        {
+          path: 'add-sales',
+          element: <Addsales />
+        },
+        {
+          path: 'view-sales',
+          element: <Viewsales />
+        },
+        {
+          path: 'add-sales-return',
+          element: <AddsalesReturn />
+        },
+        {
+          path: 'view-sales-return',
+          element: <ViewsalesReturn />
+        }
+        // ,
+        // {
+        //   path: 'update-purchase/:id',
+        //   element: <Updatepurchase />
+        // }
+      ]
+    },
+   
    
     {
       path: 'utils',

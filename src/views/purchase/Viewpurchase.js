@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { Button, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField } from '@mui/material';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import AddIcon from '@mui/icons-material/Add';
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { useState } from 'react';
 import { useEffect } from 'react';
 import { Calculate } from '@mui/icons-material';
 const TableComponent = () => {
@@ -166,10 +168,59 @@ console.log(calc)
 // console.log(total)
 // },[rows[0].Qty,rows[0].PPrice])
 
+
+
+
+export default function CustomizedTables() {
+  const [display,setDisplay]=useState([]);
+
+  useEffect(()=>{
+    View_Product()
+    .then((res)=>{
+      console.log("Product Response : " + JSON.stringify(res.data));
+      setDisplay(res.data)
+    })
+    .catch((err)=>{
+      console.log("Error :" + err);
+    })
+  },[])
+
+  
+  const handleDelete=(id)=>{
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        DeleteProduct(id)
+        .then((res)=>{
+          console.log(res);
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+      }
+    })
+   
+  }
   return (
-    <>
     <div>
+    <Box sx={{display:'flex',justifyContent:'end',mb:'10px'}}>
+    <Button variant="contained" startIcon={<AddIcon />}>
+   <Link to={'/mpurchase/add-purchase'} style={{textDecoration:'none',color:'white'}}>Add Purchase</Link>
+</Button>
      
+
         <Stack spacing={{ xs: 1 }} direction="row">
                <TextField variant="outlined" label="Bill Number" size="small" sx={{width:250,mb:3}}/>
         <FormControl sx={{  minWidth: 120 }}>
@@ -387,9 +438,7 @@ console.log(calc)
       <Button variant="contained" color="error" onClick={handleRemoveRow} startIcon={<DeleteIcon />} >
           Remove
         </Button>
+  
     </div>
-    </>
   );
-};
-
-export default TableComponent;
+}
