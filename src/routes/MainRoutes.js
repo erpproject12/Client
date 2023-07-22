@@ -18,6 +18,8 @@ const ViewParty = Loadable(lazy(() => import('views/party/ViewParty')));
 const UpdateParty = Loadable(lazy(() => import('views/party/UpdateParty')));
 const SingleParty = Loadable(lazy(() => import('views/party/SingleParty')));
 
+const ViewPurchase = Loadable(lazy(() => import('views/purchase/Viewpurchase')));
+
 // utilities routing
 const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
 const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
@@ -87,6 +89,28 @@ const MainRoutes = {
           path: 'single-party/:id',
           element: <SingleParty />
         }
+      ]
+    },
+   
+    {
+      path: 'mpurchase',
+      children: [
+        {
+          path: 'view-purchase',
+          element: <ViewPurchase />
+        }
+        // {
+        //   path: 'view-party',
+        //   element: <ViewParty />
+        // },
+        // {
+        //   path: 'update-party/:id',
+        //   element: <UpdateParty />
+        // },
+        // {
+        //   path: 'single-party/:id',
+        //   element: <SingleParty />
+        // }
       ]
     },
    
