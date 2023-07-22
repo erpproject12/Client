@@ -10,12 +10,11 @@ const icons = {
 
 const purchase = {
   id: 'mpurchase',
-  title: 'Manage Purchase',
-  caption: 'Pages Caption',
+  title: 'Purchase',
   type: 'group',
   children: [
     {
-      id: 'purchase',
+      id: 'view-purchase',
       title: 'Purchase',
       type: 'collapse',
       icon: icons.IconKey,
@@ -26,14 +25,14 @@ const purchase = {
           title: 'New Purchase',
           type: 'item',
           url: '/mpurchase/view-purchase',
-       
+          target: true
         },
         {
-          id: 'purchase-return',
-          title: 'Purchase Return',
+          id: 'register3',
+          title: 'New Purchase',
           type: 'item',
-          url: '/mpurchase/purchase-return',
-        
+          url: '/mpurchase/view-purchase',
+          target: true
         }
       ]
     }
