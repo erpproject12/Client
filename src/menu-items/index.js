@@ -5,11 +5,12 @@ import product from './product';
 import other from './other';
 import party from './party';
 import purchase from './purchase'
+import sales from './sales'
 
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [dashboard, product,party, pages,purchase, utilities, other]
+  items: [dashboard, product,party, purchase,sales, pages, utilities, other]
 };
 
 export default menuItems;

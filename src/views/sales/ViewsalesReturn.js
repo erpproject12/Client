@@ -87,7 +87,7 @@ export default function CustomizedTables() {
     <div>
     <Box sx={{display:'flex',justifyContent:'end',mb:'10px'}}>
     <Button variant="contained" startIcon={<AddIcon />}>
-   <Link to={'/mpurchase/add-purchase-return'} style={{textDecoration:'none',color:'white'}}>Add Purchase Return</Link>
+   <Link to={'/msales/add-sales-return'} style={{textDecoration:'none',color:'white'}}>Add Sales Return</Link>
 </Button>
      
     </Box>

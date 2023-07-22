@@ -3,6 +3,7 @@ import {
   Button,
   Stack,
   Table,
+  Box,
   TableBody,
   TableCell,
   TableContainer,
@@ -19,10 +20,11 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
-import { useEffect } from 'react';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';   
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { useEffect } from 'react';
+
 const TableComponent = () => {
   const [rows, setRows] = useState([
     // Initial data with an empty row
@@ -32,10 +34,8 @@ const TableComponent = () => {
       Batch: '',
       ExpDate: '',
       Qty: '0',
-      
       Discount: '0',
-      PPrice: '0',
-      SPrice: '',
+      Price: '',
       MRP: '',
       Tax: '',
       Total: ''
@@ -52,10 +52,8 @@ const TableComponent = () => {
         Batch: '',
         ExpDate: '',
         Qty: '',
-       
         Discount: '',
-        PPrice: '',
-        SPrice: '',
+        Price: '',
         MRP: '',
         Tax: '',
         Total: ''
@@ -148,7 +146,6 @@ const TableComponent = () => {
             </Select>
           </FormControl>
 
-
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker label={'Bill Date'} size="small" />
           </LocalizationProvider>
@@ -162,12 +159,11 @@ const TableComponent = () => {
                 <TableCell>Batch</TableCell>
                 <TableCell>Exp.Date</TableCell>
                 <TableCell>Qty</TableCell>
-               
+                
                 <TableCell>Discount</TableCell>
-                <TableCell>PPrice</TableCell>
-                <TableCell>SPrice</TableCell>
+                <TableCell>Price</TableCell>
                 <TableCell>MRP</TableCell>
-                <TableCell>Tax (GST%)</TableCell>
+
                 <TableCell>Total</TableCell>
               </TableRow>
             </TableHead>
@@ -217,8 +213,8 @@ const TableComponent = () => {
                       onChange={(e) => handleInputChange2(row.id, e.target.name, e.target.value)}
                     />
                   </TableCell>
-                 
-                 
+                  
+                  
                   <TableCell>
                     <TextField
                       variant="outlined"
@@ -229,17 +225,7 @@ const TableComponent = () => {
                       onChange={(e) => handleDiscount(row.id, e.target.name, e.target.value)}
                     />
                   </TableCell>
-                  <TableCell>
-                    <TextField
-                      variant="outlined"
-                      label="PPrice"
-                      name="PPrice"
-                      size="small"
-                      sx={{ borderRadius: 4, width: '10ch' }}
-                      value={row.PPrice}
-                      onChange={(e) => handlePPriceChange(row.id, e.target.name, e.target.value)}
-                    />
-                  </TableCell>
+
                   <TableCell>
                     <TextField
                       variant="outlined"
@@ -260,16 +246,7 @@ const TableComponent = () => {
                       onChange={(e) => handleInputChange(row.id, e.target.name, e.target.value)}
                     />
                   </TableCell>
-                  <TableCell>
-                    <TextField
-                      variant="outlined"
-                      label="Tax (GST%)"
-                      size="small"
-                      sx={{ borderRadius: 4, width: '10ch' }}
-                      value={row.col11}
-                      onChange={(e) => handleInputChange(row.id, e.target.name, e.target.value)}
-                    />
-                  </TableCell>
+
                   <TableCell>
                     <TextField
                       variant="outlined"
@@ -296,15 +273,16 @@ const TableComponent = () => {
             Submit
           </Button>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'end' }}>
+
+        <div style={{ display: 'flex', justifyContent: 'end'}}>
           <div className="flex">
             <div className="pr-12">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '7px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '43px', marginBottom: '7px' }}>
                 <div className="mb-8">
-                  <Typography variant="h5">Sub Total :</Typography>
+                  <Typography variant="h5">Total :</Typography>
                 </div>
                 <div className="mr-4">
-                  <TextField variant="outlined" label="Sub Total" size="small" />
+                  <TextField variant="outlined" label="Total" size="small" />
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '5px' }}>
@@ -339,10 +317,49 @@ const TableComponent = () => {
                   <TextField variant="outlined" label="Grand Total" size="small" />
                 </div>
               </div>
+
              
             </div>
           </div>
         </div>
+
+
+        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '20px',marginLeft:'150px'}}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '40px' }}>
+              <div className="mb-8">
+                <Typography variant="h5"> Select Credit Note : </Typography>
+              </div>
+              <div>
+                <TextField variant="outlined" label="Credit No" size="small" />
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '40px' }}>
+              <div className="mb-4">
+                <Typography variant="h5"> Select Purchase Bill : </Typography>
+              </div>
+            
+              <div>
+                <TextField variant="outlined" label="Purchase Bill No" size="small" />
+              </div>
+                <TextField variant="outlined" label="Purchase Bill No" size="small" />
+            </div>
+
+            
+            
+          </div>
+
+        <div style={{display:'flex',justifyContent: 'end'}}>
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+                  <div className="mb-4">
+                    <Typography variant="h5"> To Pay : </Typography>
+                  </div>
+                  <div>
+                    <TextField variant="outlined" label="To Pay" size="small" />
+                  </div>
+                </div>
+              </div>
       </div>
     </>
   );
