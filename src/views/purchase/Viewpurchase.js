@@ -10,6 +10,7 @@ import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { Calculate } from '@mui/icons-material';
+import { Box } from '@mui/system';
 const TableComponent = () => {
   
   const [rows, setRows] = useState([
@@ -219,6 +220,7 @@ export default function CustomizedTables() {
     <Button variant="contained" startIcon={<AddIcon />}>
    <Link to={'/mpurchase/add-purchase'} style={{textDecoration:'none',color:'white'}}>Add Purchase</Link>
 </Button>
+</Box>
      
 
         <Stack spacing={{ xs: 1 }} direction="row">
@@ -441,4 +443,4 @@ export default function CustomizedTables() {
   
     </div>
   );
-}
+} }
