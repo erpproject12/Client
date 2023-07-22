@@ -7,19 +7,23 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect } from 'react';
+import { Calculate } from '@mui/icons-material';
 const TableComponent = () => {
-    
+  
   const [rows, setRows] = useState([
     // Initial data with an empty row
-    { id: 1, ItemName: '', Batch: '', ExpDate: '', Qty: '0', Pack: '', Offer: '', Discount: '0', PPrice: '0', SPrice: '', MRP: '', Tax: '', Total: '' },
+    { id: 1, ItemName: '', Batch: '', ExpDate: '', Qty:0, Pack: '', Offer: '', Discount:0, PPrice:0, SPrice: '', MRP: '', Tax:0, Total:0 },
   ]);
   const [nextId, setNextId] = useState(2); // Track the next available ID for new rows
-
+  const [calc,setCalc]= useState(
+    {subtotal:0,discount:0,vat:0,Freight:0,gtotal:0}
+  )
+  console.log(calc?.subtotal+calc?.vat+calc?.Freight)
   const handleAddRow = () => {
-    setRows([...rows, { id: nextId, ItemName: '', Batch: '', ExpDate: '', Qty: '', Pack: '', Offer: '', Discount: '', PPrice: '', SPrice: '', MRP: '', Tax: '', Total: '' }]);
+    setRows([...rows, { id: nextId, ItemName: '', Batch: '', ExpDate: '', Qty:0, Pack: '', Offer: '', Discount:0, PPrice:0, SPrice: '', MRP: '', Tax:0, Total:0 }]);
     setNextId(nextId + 1);
   };
-
+  console.log(rows)
   const handleInputChange = (id, field, value) => {
     const updatedRows = rows.map((row) => (row.id === id ? { ...row, [field]: value } : row));
     setRows(updatedRows);
@@ -33,53 +37,127 @@ const TableComponent = () => {
 //     console.log(total)
  
 //   };
-const handleInputChange2 = (id, name, value) => {
+
+  const handleInputChange2 = (id, name, value) => {
     setRows((prevRows) => {
       const updatedRows = prevRows.map((row) => {
         if (row.id === id) {
-          return { ...row, [name]: value, total: calculateTotal(value, row.PPrice) };
+          return { ...row, [name]: value, Total: calculateTotal(value, row.PPrice, row.Discount,row.Tax) };
         }
         return row;
       });
       return updatedRows;
     });
   };
-const handlePPriceChange = (id, name, value) => {
+
+  const handlePPriceChange = (id, name, value) => {
     setRows((prevRows) => {
       const updatedRows = prevRows.map((row) => {
         if (row.id === id) {
-          return { ...row, [name]: value, total: calculateTotal(row.Qty, value) };
+          return { ...row, [name]: value, Total: calculateTotal(row.Qty, value, row.Discount,row.Tax) };
         }
         return row;
       });
       return updatedRows;
     });
   };
-const handleDiscount = (id, name, value) => {
+
+  const handleDiscountChange = (id, name, value) => {
     setRows((prevRows) => {
       const updatedRows = prevRows.map((row) => {
         if (row.id === id) {
-          return { ...row, [name]: value, total: calculateTotal(row.Discount, value) };
+          return { ...row, [name]: value, Total: calculateTotal(row.Qty, row.PPrice, value,row.Tax) };
         }
         return row;
       });
       return updatedRows;
     });
   };
-  const calculateTotal = (qty, price,Discount) => {
+
+  const handleTaxChange = (id, name, value) => {
+    setRows((prevRows) => {
+      const updatedRows = prevRows.map((row) => {
+        if (row.id === id) {
+          return { ...row, [name]: value, Total: calculateTotal(row.Qty, row.PPrice, row.Discount,value) };
+        }
+        return row;
+      });
+      return updatedRows;
+    });
+  };
+  const calculateTotal = (qty, price, discount,tax) => {
     const parsedQty = parseFloat(qty);
     const parsedPrice = parseFloat(price);
-    const parsedDiscount = parseFloat(Discount);
-    return isNaN(parsedQty) || isNaN(parsedPrice) ? 0 : parsedQty * parsedPrice ;
-   
+    const parsedDiscount = parseFloat(discount);
+    const parsedTax = parseFloat(tax);
+    const subtotal = isNaN(parsedQty) || isNaN(parsedPrice) ? 0 : ((parsedQty * parsedPrice)*parsedDiscount)/100;
+    const totalDiscount = (parsedQty * parsedPrice) - (isNaN(subtotal) ? 0 : subtotal);
+    const taxamt= isNaN(parsedTax)? 0 : (totalDiscount *  parsedTax)/100;
+    
+    return taxamt + totalDiscount;
+
   };
-  
+
+//   const totalDiscount = (Percentage,total) => {
+//     if(Percentage==0 || Percentage==null || Percentage==""){
+//         return total
+//     }
+//     else{
+//     console.log(Percentage,total)
+//     const parsedPercentage = parseFloat(Percentage);
+//     const parsedtotal = parseFloat(total);
+//  console.log(parsedtotal * parsedPercentage/100,333)
+//     return isNaN(parsedPercentage) || isNaN(parsedtotal) ? 0 : total - ((parsedtotal * parsedPercentage)/100)  ;
+    
+//     }
+//   };
+useEffect(()=>{
+   
+
+let discount=0;
+let price=0;
+let qty=0;
+let tot=0;
+let subtotal=0;
+let  tax=0;
+   rows.map((row)=>{
+        price = parseInt(row.PPrice)
+        qty = parseInt(row.Qty)
+        tot = (price * qty)
+        subtotal +=tot;
+        discount += parseInt(row.Discount)
+        tax += parseInt(row.Tax)
+    })
+    let amt = subtotal*discount/100;
+    let gtotal = subtotal-amt;
+    let vat = gtotal * tax /100; 
+    let all = gtotal + vat;
+    
+    let Freight=parseInt(calc.Freight);
+    if(isNaN(Freight)){
+        setCalc({...calc,"subtotal":subtotal,"discount":discount,"tax":tax,"gtotal":all})
+    }else{ let total=all+Freight
+    
+    
+    setCalc({...calc,"subtotal":subtotal,"discount":discount,"tax":tax,"gtotal":total})
+    }
+  console.log(vat,88)
+},[rows,calc])
+
+const handleFreight=((e)=>{
+    let Freight=parseInt(e.target.value)
+    setCalc({...calc,[e.target.name]:Freight})
+
+})
+console.log(calc)
   const handleRemoveRow = () => {
     if (rows.length > 1) {
       setRows(rows.slice(0, -1));
       setNextId(nextId-1)
     }
   };
+
+ 
 // useEffect(()=>{
 //     console.log('hello')
 // let qty=rows[0].Qty;
@@ -202,10 +280,11 @@ const handleDiscount = (id, name, value) => {
                   <TextField
                     variant="outlined"
                     label="Discount"
+                    name="Discount"
                      sx={{ borderRadius: 4 ,width:"10ch"}}
                     size="small"
                     value={row.Discount}
-                    onChange={(e) => handleDiscount(row.id,e.target.name, e.target.value)}
+                    onChange={(e) => handleDiscountChange(row.id,e.target.name, e.target.value)}
                   />
                 </TableCell>
                 <TableCell>
@@ -244,9 +323,10 @@ const handleDiscount = (id, name, value) => {
                     variant="outlined"
                    label="Tax (GST%)"
                     size="small"
+                    name="Tax"
                     sx={{ borderRadius: 4 ,width:"10ch"}}
                     value={row.col11}
-                    onChange={(e) => handleInputChange(row.id, e.target.name, e.target.value)}
+                    onChange={(e) => handleTaxChange(row.id, e.target.name, e.target.value)}
                   />
                 </TableCell>
                 <TableCell>
@@ -254,9 +334,10 @@ const handleDiscount = (id, name, value) => {
                     variant="outlined"
                    label="Total"
                     size="small"
+                    name="Total"
                     sx={{ borderRadius: 0 ,width:"10ch"}}
-                    value= {row.total}
-                    onChange={(e) => handleInputChange(row.id, e.target.name, e.target.value)}
+                    value= {isNaN(row.Total)? 0 : row.Total}
+                    
                   />
                 </TableCell>
                
@@ -272,26 +353,27 @@ const handleDiscount = (id, name, value) => {
       <div className="pr-12">
       <div className='flex'>
         <div className="mb-8">Sub Total:</div>
+
         <div className="mr-4">
-          <TextField variant="outlined" label="Sub Total" size="small" />
+          <TextField variant="outlined" name="subtotal"   value={isNaN(calc.subtotal)?0:calc.subtotal} label="Sub Total" size="small" />
         </div>
       </div>
       
     
           
           <div className="mb-8">Discount:      <div>
-            <TextField variant="outlined" label="Discount" size="small" />
+            <TextField variant="outlined"  name="discount" value={isNaN(calc.discount)?0:calc.discount} label="Discount" size="small" />
           </div></div>
           <div className="mb-8">VAT:      <div>
-            <TextField variant="outlined" label="Vat" size="small" />
+            <TextField variant="outlined" name="vat" label="Vat" value={isNaN(calc.tax)?0:calc.tax} size="small" />
           </div></div>
           <div className="mb-8">Freight:      <div>
-            <TextField variant="outlined" label="Freight" size="small" />
+            <TextField variant="outlined" name="Freight"  onChange={handleFreight}  label="Freight" size="small" />
           </div></div>
           
           <strong>
             <div className="mb-8">Grand Total: <div>
-            <TextField variant="outlined" label="Grand Total" size="small" />
+            <TextField variant="outlined" name='gtotal' value={isNaN(calc.gtotal)?0:calc.gtotal} label="Grand Total" size="small" />
           </div></div>
           </strong>
         </div>
