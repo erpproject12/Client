@@ -4,11 +4,12 @@ import utilities from './utilities';
 import product from './product';
 import other from './other';
 import party from './party';
+import purchase from './purchase'
 
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [dashboard, product,party, pages, utilities, other]
+  items: [dashboard, product,party, pages,purchase, utilities, other]
 };
 
 export default menuItems;
