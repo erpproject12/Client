@@ -68,6 +68,7 @@ const TableComponent = () => {
     const updatedRows = rows.map((row) => (row.id === id ? { ...row, [field]: value } : row));
     setRows(updatedRows);
   };
+
   //   const handleInputChange2 = (id, field, value) => {
   //     const updatedRows = rows.map((row) => (row.id === id ? { ...row, [field]: value } : row));
   //     setRows(updatedRows);
@@ -86,7 +87,7 @@ const TableComponent = () => {
         return row;
       });
       return updatedRows;
-    });
+    }); 
   };
   const handlePPriceChange = (id, name, value) => {
     setRows((prevRows) => {
@@ -172,7 +173,7 @@ const TableComponent = () => {
             </TableHead>
             <TableBody>
               {rows.map((row) => (
-                <TableRow key={row.id}>
+                            <TableRow key={row.id}>
                   <TableCell>{row.id}</TableCell>
                   <TableCell>
                     <TextField
