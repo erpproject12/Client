@@ -37,12 +37,10 @@ export const Delete_Party = (id) => {
     return url.delete(`/api/party_delete/${id}`)
 }
 
-//Purchase
-
+//purchse
 export const Insert_Purchase = (val) =>{
-    return url.post("/api/insert_purchase",val)
+    return url.post('/api/purchase_insert',val)
 }
-
 
 const url = Axios.create({
     baseURL:"http://127.0.0.1:4000"
