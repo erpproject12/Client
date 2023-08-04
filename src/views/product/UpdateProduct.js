@@ -32,6 +32,7 @@ import {
 
 const SamplePage = () => {
   let params = useParams();
+
   const [product, setProduct] = useState({});
   useEffect(() => {
     Single_Product(params.id)
@@ -82,6 +83,7 @@ const SamplePage = () => {
           />
         </Box>
       </FormControl>
+
 
       <FormControl sx={{ m: 1, width: '50ch', mt: 3 }}>
         <InputLabel id="demo-simple-select-label">Tax Percentage</InputLabel>

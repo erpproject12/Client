@@ -45,6 +45,27 @@ export const Insert_Purchase = (val) =>{
 }
 
 
+//sales
+
+export const Insert_Sales = (val) =>{
+    return url.post('/api/sale_insert',val)
+}
+
+export const View_Sales = () =>{
+    return url.get('/api/view_sale_return')
+}
+
+export const View_All = (id) =>{
+    return url.get(`/api/view_sales_return/${id}`)
+}
+
+export const Update_Sales = (id,sales) =>{
+    return url.put(`/api/update_sales/${id}`,sales)
+}
+
+export const Delete_Sales = (id) =>{
+    return url.delete(`/api/delete_sales/${id}`)
+}
 
 //Purchase Return
 export const Insert_PurchaseReturn = (val) =>{
@@ -71,6 +92,7 @@ export const UpdateOpeningStock1 = (id,stock) =>{
 export const UpdateOpeningStock2 = (id,item) =>{
     return url.put(`/api/update_openingstock2/${id}`,item)
 }
+
 
 
 
