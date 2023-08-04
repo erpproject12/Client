@@ -40,7 +40,7 @@ const SamplePage = () => {
         setProduct(res.data);
       })
       .catch((err) => {
-        console.log(err.massege);
+        console.log(err.message);
       });
   }, []);
   const Change = (e) => {
@@ -48,17 +48,6 @@ const SamplePage = () => {
   };
 
   const onSubmit = () => {
-    // const product_code = product.product_code
-    // const product_name = product.product_name
-    // const tax_code = product.tax_code
-    // const product_description = product.product_description
-    // const rack_no = product.rack_no
-    // const HSN = product.HSN
-    // const category = product.category
-    // const manufactures = product.manufactures
-    // const unit_of_masure = product.unit_of_masure
-    // const weight_dimension = product.weight_dimension
-    // const variants = product.variants
     Update_Product(params.id, product)
       .then((res) => {
         console.log('Updated Product :' + JSON.stringify(res.data));

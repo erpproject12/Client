@@ -8,6 +8,8 @@ import { ButtonBase } from '@mui/material';
 import config from 'config';
 import Logo from 'ui-component/Logo';
 import { MENU_OPEN } from 'store/actions';
+import CategoryIcon from '@mui/icons-material/Category';
+import Typography from '@mui/material/Typography';
 
 // ==============================|| MAIN LOGO ||============================== //
 
@@ -16,7 +18,7 @@ const LogoSection = () => {
   const dispatch = useDispatch();
   return (
     <ButtonBase disableRipple onClick={() => dispatch({ type: MENU_OPEN, id: defaultId })} component={Link} to={config.defaultPath}>
-      <Logo />
+      <CategoryIcon sx={{fontSize:"45px"}}/><Typography variant='h1'sx={{fontSize:"40px"}}>ERP</Typography>
     </ButtonBase>
   );
 };
