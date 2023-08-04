@@ -28,10 +28,11 @@ import {
 } from '@mui/material';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import { UpdateOpeningStock2} from '../../global';
+
 // import { useParams } from 'react-router';
 
-export default function UpdateOpeningStock({ toggleShow, centredModal, setCentredModal, id ,setid}) {
-    const [count, setCount] = useState(0);
+export default function UpdateOpeningStock({ toggleShow, centredModal, setCentredModal, id ,setid,setCount}) {
+    
 
   const it_id=id._id;
 
@@ -72,6 +73,7 @@ export default function UpdateOpeningStock({ toggleShow, centredModal, setCentre
     UpdateOpeningStock2(it_id,id)
     .then((res)=>{
         console.log("Items"+res.data);
+        setCount((prevCount) => prevCount + 1)
         toggleShow(id)
         
     })
@@ -150,8 +152,8 @@ export default function UpdateOpeningStock({ toggleShow, centredModal, setCentre
                           sx={{ borderRadius: 4, width: '10ch' }}
                           size="small"
                           name="qty"
-                          value={id?.qty}
-                          onChange={(e) => Change('qty', parseInt(e.target.value))}
+                          value={id?.qty }
+                          onChange={(e) => Change('qty', parseInt(e.target.value == '' ? 0 :e.target.value ))}
                         />
                       </TableCell>
 

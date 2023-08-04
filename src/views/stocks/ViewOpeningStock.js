@@ -25,6 +25,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Link } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import CheckIcon from '@mui/icons-material/Check';
+import moment from 'moment';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -60,6 +61,7 @@ export default function ViewOpeningStock() {
   const [display, setDisplay] = useState([]);
   const [display2, setDisplay2] = useState([]);
   const [count, setCount] = useState(0);
+  
   const [productId, setProductId] = useState('');
   const [stock, setStock] = useState({
     batch: '',
@@ -126,6 +128,7 @@ export default function ViewOpeningStock() {
 
 
   useEffect(() => {
+    // alert(count);
     View_Product()
       .then((res) => {
         console.log('Product Response : ' + JSON.stringify(res.data));
@@ -313,7 +316,7 @@ export default function ViewOpeningStock() {
                   </StyledTableCell>
                   <StyledTableCell>{item.product_name}</StyledTableCell>
                   <StyledTableCell>{item.batch}</StyledTableCell>
-                  <StyledTableCell>{item.exp_date}</StyledTableCell>
+                  <StyledTableCell>{moment(item?.exp_date).format('L')}</StyledTableCell>
                   <StyledTableCell>{item.qty}</StyledTableCell>
                   <StyledTableCell>₹{item?.price?.toFixed(2)}</StyledTableCell>
                   <StyledTableCell>₹{item?.sell_price?.toFixed(2)}</StyledTableCell>
@@ -333,6 +336,7 @@ export default function ViewOpeningStock() {
               );
             })}
             <UpdateOpeningStock
+            setCount={setCount}
               toggleShow={toggleShow}
               centredModal={centredModal}
               setCentredModal={setCentredModal}
