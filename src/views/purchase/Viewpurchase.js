@@ -96,7 +96,7 @@ console.log(formData.rows.Tax);
 
 
       }
-    })
+    }
    
   }
   return (
