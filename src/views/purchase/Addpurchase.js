@@ -73,6 +73,7 @@ const YourComponent = () => {
       rows: updatedRows
     });
   };
+
   useEffect(() => {
     View_Product()
       .then((res) => {
@@ -84,6 +85,7 @@ const YourComponent = () => {
       });
   }, []);
   console.log(formData);
+
   useEffect(() => {
     View_Party()
       .then((res) => {
@@ -94,6 +96,8 @@ const YourComponent = () => {
         console.log('Error:' + error);
       });
   }, []);
+
+
   const calculateRowTotal = (row) => {
     // Your logic to calculate the Total for a single row
     // For example: (Qty * PPrice) - Discount
@@ -113,6 +117,8 @@ const YourComponent = () => {
         console.log(error);
       });
   };
+
+
   const recalculateAll = () => {
     // Calculate SubTotal
     let discounts = 0;
@@ -157,6 +163,8 @@ const YourComponent = () => {
     });
   };
   console.log(formData.rows.Tax);
+
+
   const handleDeleteRow = (index) => {
     const updatedRows = formData.rows.filter((row, i) => i !== index);
     setFormData({
@@ -194,6 +202,8 @@ const YourComponent = () => {
       }
     }
   };
+
+
   const handleparty = (value) => {
     
     if (value) {
@@ -403,7 +413,7 @@ const YourComponent = () => {
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '9px' }}>
-              <div className="mb-8">
+              <div className="mb-4">
                 <Typography variant="h5"> Discount : </Typography>
               </div>
               <div>
