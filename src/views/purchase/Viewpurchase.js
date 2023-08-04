@@ -9,39 +9,29 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { View_Product,DeleteProduct } from '../../global';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import {Link} from 'react-router-dom'
-import { Box, color } from '@mui/system';
-import { Button } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import Swal from 'sweetalert2'
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
 
 
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers';
+import {Insert_Purchase,View_Product,View_Party} from '../../global'
+import { setDate } from 'date-fns';
 
-export default function CustomizedTables() {
+const YourComponent = () => {
+  const initialRow = {
+    id: 1,
+    ItemName: "",
+    Batch: "",
+    ExpDate: "",
+    Qty: 0,
+    Discount: 0,
+    PPrice: 0,
+    SPrice: "",
+    MRP: "",
+    Tax: 0,
+    Total: 0
+  };
+
   const [display,setDisplay]=useState([]);
 
   useEffect(()=>{
@@ -56,29 +46,55 @@ export default function CustomizedTables() {
   },[])
 
   
-  const handleDelete=(id)=>{
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        DeleteProduct(id)
-        .then((res)=>{
-          console.log(res);
-        })
-        .catch((err)=>{
-          console.log(err)
-        })
-        Swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        )
+  const handleFreight = (e) => {
+    let Freight = parseInt(e.target.value);
+    setFormData({ ...formData, [e.target.name]: Freight });
+    
+  };
+
+  const handleAddRow = () => {
+    setFormData({
+      ...formData,
+      rows: [...formData.rows, { ...initialRow, id: formData.rows.length + 1 }]
+      
+    });
+  };
+console.log(formData.rows.Tax);
+  const handleDeleteRow = (index) => {
+    const updatedRows = formData.rows.filter((row, i) => i !== index);
+    setFormData({
+      ...formData,
+      rows: updatedRows
+     
+    });
+    
+  };
+  console.log(party);  
+
+  const handleAutocompleteChange = (value,index) => {
+    if (value) {
+      // Find the selected item by its product_name
+      
+      const selectedItem = display.find((item) => item.product_name === value);
+      if (selectedItem) {
+       alert (selectedItem?._id)
+       
+       
+        const updatedRows = [...formData.rows];
+        updatedRows[index]['Tax'] = value;
+        updatedRows[index]['ItemName']=value;
+        updatedRows[index].ItemName = selectedItem?._id
+        // Recalculate the Total for the current row
+        updatedRows[index].Tax = selectedItem?.tax_code
+        setFormData({
+          ...formData,
+          rows: updatedRows
+        });
+    
+        // alert(selectedItem?.tax_code);
+
+
+
       }
     })
    

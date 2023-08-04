@@ -1,10 +1,10 @@
 // material-ui
 
 // project imports
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import MainCard from 'ui-component/cards/MainCard';
 
-import {Insert_Product} from '../../global'
+import {Insert_Product,View_Product} from '../../global'
 import {
   Box,
     Button,
@@ -34,10 +34,21 @@ import {
 
 
 const SamplePage = () =>{
-  const [product,setProduct]=useState({})
-
+  const [product,setProduct]=useState({});
+ 
+  useEffect(()=>{
+    View_Product()
+    .then((res)=>{
+      console.log("Product Response : " + JSON.stringify(res.data));
+      setEnteredProductName(res.data)
+    })
+    .catch((err)=>{
+      console.log("Error :" + err);
+    })
+  },[])
   const Change=(e)=>{
   setProduct({...product,[e.target.name]:e.target.value})
+
   }
   
   const onSubmit=(e)=>{
@@ -52,6 +63,7 @@ const SamplePage = () =>{
   })
   }
 
+
 return(
 
   <MainCard title="Add Product Details">
@@ -62,9 +74,11 @@ return(
         }}
       >
         <TextField id="outlined-basic" onChange={Change} label="Product Code" name='product_code' variant="outlined" />
+
         
         <TextField id="outlined-basic" onChange={Change}  label="Product Name" name='product_name' variant="outlined" />
         
+
       </Box>
     </FormControl>
 

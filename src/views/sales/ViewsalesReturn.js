@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { View_Product,DeleteProduct } from '../../global';
+import { Delete_Sales } from '../../global';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import {Link} from 'react-router-dom'
@@ -19,6 +19,7 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Swal from 'sweetalert2'
+import {View_Sales} from  '../../global';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -45,9 +46,9 @@ export default function CustomizedTables() {
   const [display,setDisplay]=useState([]);
 
   useEffect(()=>{
-    View_Product()
+    View_Sales()
     .then((res)=>{
-      console.log("Product Response : " + JSON.stringify(res.data));
+      console.log("Sales Return Response : " + JSON.stringify(res.data));
       setDisplay(res.data)
     })
     .catch((err)=>{
@@ -67,7 +68,7 @@ export default function CustomizedTables() {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        DeleteProduct(id)
+        Delete_Sales(id)
         .then((res)=>{
           console.log(res);
         })
@@ -96,12 +97,14 @@ export default function CustomizedTables() {
         <TableHead>
           <TableRow>
             <StyledTableCell>#</StyledTableCell>
-            <StyledTableCell>Product Code</StyledTableCell>
-            <StyledTableCell>Product Name</StyledTableCell>
-            <StyledTableCell>Tax(%)</StyledTableCell>
-            <StyledTableCell>Description</StyledTableCell>
-            <StyledTableCell>Active Status</StyledTableCell>
-            <StyledTableCell>Date</StyledTableCell>
+            <StyledTableCell>Party Name</StyledTableCell>
+            <StyledTableCell>Bill No</StyledTableCell>
+            <StyledTableCell>SubTotal</StyledTableCell>
+            <StyledTableCell>Discount</StyledTableCell>
+            <StyledTableCell>Vat</StyledTableCell>
+            <StyledTableCell>Freight</StyledTableCell>
+            <StyledTableCell>Grand Total</StyledTableCell>
+            <StyledTableCell>Bill Date</StyledTableCell>
             <StyledTableCell>Action</StyledTableCell>
           </TableRow>
         </TableHead>
@@ -112,15 +115,17 @@ export default function CustomizedTables() {
               <StyledTableCell component="th" scope="row">
                 {index+1}
               </StyledTableCell>
-              <StyledTableCell >{item.product_code}</StyledTableCell>
-              <StyledTableCell >{item.product_name}</StyledTableCell>
-              <StyledTableCell >{item.tax_code}</StyledTableCell>
-              <StyledTableCell >{item.product_description}</StyledTableCell>
-              <StyledTableCell >{item.active_status}</StyledTableCell>
-              <StyledTableCell >{item.date}</StyledTableCell>
+              <StyledTableCell >{item?.party_id?.party_name}</StyledTableCell>
+              <StyledTableCell >{item.sales_return_bill}</StyledTableCell>
+              <StyledTableCell >₹{item.sales_return_total}</StyledTableCell>
+              <StyledTableCell >{item.sales_return_discount}</StyledTableCell>
+              <StyledTableCell >{item.sales_return_vat}</StyledTableCell>
+              <StyledTableCell >{item.sales_return_freight}</StyledTableCell>
+              <StyledTableCell >{item.sales_return_gtotal}</StyledTableCell>
+              <StyledTableCell >{item.sales_return_date}</StyledTableCell>
               <StyledTableCell sx={{display:'flex'}}>
-              <Link to={`/mproduct/single-product/${item._id}`} ><IconButton><RemoveRedEyeIcon sx={{color:'green'}}/></IconButton></Link>
-                <Link to={`/mproduct/update-product/${item._id}`}><IconButton><BorderColorIcon color="primary"/></IconButton></Link>
+              <Link to={`/msales/view-all/${item._id}`} ><IconButton><RemoveRedEyeIcon sx={{color:'green'}}/></IconButton></Link>
+                <Link to={`/msales/update-sales-return/${item._id}`}><IconButton><BorderColorIcon color="primary"/></IconButton></Link>
                  <IconButton><DeleteOutlineIcon onClick={()=>{handleDelete(item._id)}} sx={{color:'red'}}/></IconButton>
                   </StyledTableCell>
             </StyledTableRow>
