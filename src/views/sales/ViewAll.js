@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { View_Product,DeleteProduct } from '../../global';
+import { View_All } from '../../global';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import {Link} from 'react-router-dom'
@@ -19,6 +19,7 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Swal from 'sweetalert2'
+import { useParams } from 'react-router';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -42,10 +43,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 export default function CustomizedTables() {
+    const params = useParams();
   const [display,setDisplay]=useState([]);
 
   useEffect(()=>{
-    View_Product()
+    View_All(params.id)
     .then((res)=>{
       console.log("Product Response : " + JSON.stringify(res.data));
       setDisplay(res.data)
@@ -54,7 +56,7 @@ export default function CustomizedTables() {
       console.log("Error :" + err);
     })
   },[])
-
+console.log(display);
   
   const handleDelete=(id)=>{
     Swal.fire({
@@ -96,29 +98,34 @@ export default function CustomizedTables() {
         <TableHead>
           <TableRow>
             <StyledTableCell>#</StyledTableCell>
-            <StyledTableCell>Product Name</StyledTableCell>
-            <StyledTableCell>Bill Number</StyledTableCell>
-            <StyledTableCell>SubTotal</StyledTableCell>
+            <StyledTableCell>ItemName</StyledTableCell>
+            <StyledTableCell>Batch</StyledTableCell>
+            <StyledTableCell>Qty</StyledTableCell>
             <StyledTableCell>Discount</StyledTableCell>
-            <StyledTableCell>Vat</StyledTableCell>
-            <StyledTableCell>Grand Total</StyledTableCell>
-            <StyledTableCell>Bill Date</StyledTableCell>
+            <StyledTableCell>PPrice</StyledTableCell>
+            <StyledTableCell>MRP</StyledTableCell>
+            <StyledTableCell>Tax</StyledTableCell>
+            <StyledTableCell>Total</StyledTableCell>
+            <StyledTableCell>ExpDate</StyledTableCell>
             <StyledTableCell>Action</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {display.map((item,index)=>{
+          {(display?.sales_return)?.map((item,index)=>{
             return(
               <StyledTableRow key={index} >
               <StyledTableCell component="th" scope="row">
                 {index+1}
               </StyledTableCell>
-              <StyledTableCell >{item.product_code}</StyledTableCell>
-              <StyledTableCell >{item.product_name}</StyledTableCell>
-              <StyledTableCell >{item.tax_code}</StyledTableCell>
-              <StyledTableCell >{item.product_description}</StyledTableCell>
-              <StyledTableCell >{item.active_status}</StyledTableCell>
-              <StyledTableCell >{item.date}</StyledTableCell>
+              <StyledTableCell >{item.ItemName.product_name}</StyledTableCell>
+              <StyledTableCell >{item.Batch}</StyledTableCell>
+              <StyledTableCell >{item.Qty}</StyledTableCell>
+              <StyledTableCell >{item.Discount}</StyledTableCell>
+              <StyledTableCell >{item.PPrice}</StyledTableCell>
+              <StyledTableCell >{item.MRP}</StyledTableCell>
+              <StyledTableCell >{item.Tax}</StyledTableCell>
+              <StyledTableCell >{item.Total}</StyledTableCell>
+              <StyledTableCell >{item.ExpDate}</StyledTableCell>
               <StyledTableCell sx={{display:'flex'}}>
               <Link to={`/mproduct/single-product/${item._id}`} ><IconButton><RemoveRedEyeIcon sx={{color:'green'}}/></IconButton></Link>
                 <Link to={`/mproduct/update-product/${item._id}`}><IconButton><BorderColorIcon color="primary"/></IconButton></Link>

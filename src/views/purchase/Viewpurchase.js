@@ -27,6 +27,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers';
 import {Insert_Purchase,View_Product,View_Party} from '../../global'
+import { setDate } from 'date-fns';
 
 const YourComponent = () => {
   const initialRow = {
@@ -177,6 +178,8 @@ console.log(formData.rows.Tax);
     });
     
   };
+  console.log(party);  
+
   const handleAutocompleteChange = (value,index) => {
     if (value) {
       // Find the selected item by its product_name

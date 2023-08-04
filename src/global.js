@@ -40,6 +40,29 @@ export const Delete_Party = (id) => {
 export const Insert_Purchase = (val) =>{
     return url.post('/api/purchase_insert',val)
 }
+
+
+//sales
+
+export const Insert_Sales = (val) =>{
+    return url.post('/api/sale_insert',val)
+}
+
+export const View_Sales = () =>{
+    return url.get('/api/view_sale_return')
+}
+
+export const View_All = (id) =>{
+    return url.get(`/api/view_sales_return/${id}`)
+}
+
+export const Update_Sales = (id,sales) =>{
+    return url.put(`/api/update_sales/${id}`,sales)
+}
+
+export const Delete_Sales = (id) =>{
+    return url.delete(`/api/delete_sales/${id}`)
+}
 const url = Axios.create({
     baseURL:"http://127.0.0.1:4000"
 })
