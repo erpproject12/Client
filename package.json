@@ -28,6 +28,7 @@
     "framer-motion": "^6.3.16",
     "i": "^0.3.7",
     "material-ui-popup-state": "^4.0.1",
+    "mdb-react-ui-kit": "^6.1.0",
     "npm": "^9.8.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",

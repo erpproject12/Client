@@ -5,7 +5,7 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 // constant
 
 const material = {
-    TrendingUpIcon
+  TrendingUpIcon
 };
 
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
@@ -26,15 +26,13 @@ const sales = {
           id: 'view-sales',
           title: 'New Sales',
           type: 'item',
-          url: '/msales/view-sales',
-        
+          url: '/msales/view-sales'
         },
         {
           id: 'view-sales-return',
           title: 'Sales Return',
           type: 'item',
-          url: '/msales/view-sales-return',
-         
+          url: '/msales/view-sales-return'
         }
       ]
     }

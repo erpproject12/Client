@@ -13,7 +13,6 @@ const icons = {
 
 const products = {
   id: 'mproduct',
-  title: 'Product',
   type: 'group',
   children: [
     {
