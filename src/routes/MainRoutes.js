@@ -26,10 +26,6 @@ const ViewpurchaseReturn = Loadable(lazy(() => import('views/purchase/Viewpurcha
 const ViewAllpurchaseReturn = Loadable(lazy(() => import('views/purchase/ViewAllPurchaseReturn')));
 const UpdatepurchaseReturn = Loadable(lazy(() => import('views/purchase/Updatepurchase_Return')));
 
-
-
-
-
 const Addsales = Loadable(lazy(() => import('views/sales/Addsales')));
 const Viewsales = Loadable(lazy(() => import('views/sales/Viewsales')));
 const AddsalesReturn = Loadable(lazy(() => import('views/sales/AddsalesReturn')));
@@ -38,10 +34,10 @@ const ViewAll = Loadable(lazy(() => import('views/sales/ViewAll')));
 const UpdateSalesReturn = Loadable(lazy(() => import('views/sales/UpdateSalesReturn')));
 
 
-
-
 // const Addsales = Loadable(lazy(() => import('views/sales/Addsales')));
 const ViewOpeningStock = Loadable(lazy(() => import('views/stocks/ViewOpeningStock')));
+
+const Reciept = Loadable(lazy(() => import('views/account/Reciept')));
 
 
 // utilities routing
@@ -182,6 +178,18 @@ const MainRoutes = {
         {
           path: 'view-opening-stocks',
           element: <ViewOpeningStock />
+        }
+        
+      ]
+    },
+   
+    {
+      path: 'account',
+      children: [
+       
+        {
+          path: 'reciept',
+          element: <Reciept />
         }
         
       ]
