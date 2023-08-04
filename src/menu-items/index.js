@@ -6,11 +6,13 @@ import other from './other';
 import party from './party';
 import purchase from './purchase'
 import sales from './sales'
+import stock from './stock'
 
 // ==============================|| MENU ITEMS ||============================== //
+// , product,party, purchase,sales,stock, pages, utilities, other
 
 const menuItems = {
-  items: [dashboard, product,party, purchase,sales, pages, utilities, other]
+  items: [dashboard]
 };
 
 export default menuItems;

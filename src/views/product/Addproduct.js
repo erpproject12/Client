@@ -62,7 +62,9 @@ return(
         }}
       >
         <TextField id="outlined-basic" onChange={Change} label="Product Code" name='product_code' variant="outlined" />
+        
         <TextField id="outlined-basic" onChange={Change}  label="Product Name" name='product_name' variant="outlined" />
+        
       </Box>
     </FormControl>
 
@@ -81,6 +83,8 @@ return(
         <MenuItem value={10}>10%</MenuItem>
         <MenuItem value={30}>3%</MenuItem>
       </Select>
+      
+       <TextField id="outlined-basic" onChange={Change}  label="HSN" name='HSN' variant="outlined" />
     </FormControl>
     <Box sx={{ m: 1 }}>
       <FormControl fullWidth>

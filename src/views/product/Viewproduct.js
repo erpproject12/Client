@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import { View_Product,DeleteProduct } from '../../global';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { useNavigate } from 'react-router-dom';
 import {Link} from 'react-router-dom'
 import { Box, color } from '@mui/system';
 import { Button } from '@mui/material';
@@ -43,6 +44,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function CustomizedTables() {
   const [display,setDisplay]=useState([]);
+  let nav = useNavigate();
 
   useEffect(()=>{
     View_Product()
@@ -68,8 +70,10 @@ export default function CustomizedTables() {
     }).then((result) => {
       if (result.isConfirmed) {
         DeleteProduct(id)
+       
         .then((res)=>{
           console.log(res);
+          nav('/mpurchase/view-purchase-return')
         })
         .catch((err)=>{
           console.log(err)

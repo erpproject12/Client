@@ -22,7 +22,8 @@ const Addpurchase = Loadable(lazy(() => import('views/purchase/Addpurchase')));
 const Viewpurchase = Loadable(lazy(() => import('views/purchase/Viewpurchase')));
 const AddpurchaseReturn = Loadable(lazy(() => import('views/purchase/AddpurchaseReturn')));
 const ViewpurchaseReturn = Loadable(lazy(() => import('views/purchase/ViewpurchaseReturn')));
-// const Updatepurchase = Loadable(lazy(() => import('views/purchase/Updatepurchase')));
+const ViewAllpurchaseReturn = Loadable(lazy(() => import('views/purchase/ViewAllPurchaseReturn')));
+const UpdatepurchaseReturn = Loadable(lazy(() => import('views/purchase/Updatepurchase_Return')));
 
 
 
@@ -32,6 +33,11 @@ const Viewsales = Loadable(lazy(() => import('views/sales/Viewsales')));
 const AddsalesReturn = Loadable(lazy(() => import('views/sales/AddsalesReturn')));
 const ViewsalesReturn = Loadable(lazy(() => import('views/sales/ViewsalesReturn')));
 // const Updatepurchase = Loadable(lazy(() => import('views/purchase/Updatepurchase')));
+
+
+
+// const Addsales = Loadable(lazy(() => import('views/sales/Addsales')));
+const ViewOpeningStock = Loadable(lazy(() => import('views/stocks/ViewOpeningStock')));
 
 
 // utilities routing
@@ -123,12 +129,15 @@ const MainRoutes = {
         {
           path: 'view-purchase-return',
           element: <ViewpurchaseReturn />
+        },
+        {
+          path: 'viewall-purchasereturn/:id',
+          element: <ViewAllpurchaseReturn />
+        },
+        {
+          path: 'update-purchasereturn/:id',
+          element: <UpdatepurchaseReturn />
         }
-        // ,
-        // {
-        //   path: 'update-purchase/:id',
-        //   element: <Updatepurchase />
-        // }
       ]
     },
    
@@ -156,6 +165,18 @@ const MainRoutes = {
         //   path: 'update-purchase/:id',
         //   element: <Updatepurchase />
         // }
+      ]
+    },
+
+    {
+      path: 'mstock',
+      children: [
+       
+        {
+          path: 'view-opening-stocks',
+          element: <ViewOpeningStock />
+        }
+        
       ]
     },
    
