@@ -34,6 +34,7 @@ import {
 
 
 const SamplePage = () =>{
+  const [on,setOn]=useState(false)
   const [product,setProduct]=useState({});
  
   useEffect(()=>{
@@ -53,10 +54,15 @@ const SamplePage = () =>{
   
   const onSubmit=(e)=>{
     e.preventDefault();//this is used for from tag
+    setOn(false)
       // console.log();
       Insert_Product(product)
       .then((res)=>{
         console.log(res)
+        if(res.data.copy){
+          setOn(true)
+       
+        }
       })
   .catch((error)=>{
   console.log("Error :"+ error)
@@ -75,9 +81,17 @@ return(
       >
         <TextField id="outlined-basic" onChange={Change} label="Product Code" name='product_code' variant="outlined" />
 
+        <TextField
+        id="outlined-basic"
+        onChange={Change}
+        label="Product Name"
+        name="product_name"
+        variant="outlined"
+       helperText={on && "Entered Product Already Exists"}
+        FormHelperTextProps={{ style: { color: 'red' } }}
+      />
         
-        <TextField id="outlined-basic" onChange={Change}  label="Product Name" name='product_name' variant="outlined" />
-        
+     
 
       </Box>
     </FormControl>

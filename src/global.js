@@ -48,7 +48,7 @@ export const Insert_Purchase = (val) =>{
 //sales
 
 export const Insert_Sales = (val) =>{
-    return url.post('/api/sale_insert',val)
+    return url.post('/api/sale_insert_return',val)
 }
 
 export const View_Sales = () =>{
@@ -60,11 +60,11 @@ export const View_All = (id) =>{
 }
 
 export const Update_Sales = (id,sales) =>{
-    return url.put(`/api/update_sales/${id}`,sales)
+    return url.put(`/api/update_sales_return/${id}`,sales)
 }
 
 export const Delete_Sales = (id) =>{
-    return url.delete(`/api/delete_sales/${id}`)
+    return url.delete(`/api/delete_sales_return/${id}`)
 }
 
 //Purchase Return
