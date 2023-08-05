@@ -122,13 +122,6 @@ export default function ViewParty() {
                         <RemoveRedEyeIcon sx={{ color: 'green' }} />
                      
                     </Link>
-                    <Link to={`/mparty/update-party/${item._id}`}>
-                      
-                        <BorderColorIcon color="primary" />
-                      
-                    </Link>
-                   
-                      <DeleteOutlineIcon onClick={() => handleDelete(item._id)} sx={{ color: 'red' }} />
                   
                   </StyledTableCell>
                 </StyledTableRow>

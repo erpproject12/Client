@@ -23,7 +23,7 @@ const YourComponent = () => {
     ItemName: "",
     Batch: "",
     ExpDate: "",
-    Qty: 0,
+    Qty: 0, 
     Discount: 0,
     PPrice: 0,
     SPrice: "",
@@ -67,7 +67,7 @@ console.log(formData.rows.Tax);
       rows: updatedRows
      
     });
-    
+    console.log(index); 
   };
   console.log(party);  
 
