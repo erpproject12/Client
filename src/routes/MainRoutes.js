@@ -199,14 +199,14 @@ const MainRoutes = {
           element: <Reciept />
         }
         
-          path: 'single-sales/:id',
-          element: <Singlesales />
-        },
+        //   path: 'single-sales/:id',
+        //   element: <Singlesales />
+        // },
        
-        {
-          path: 'update-sales/:id',
-          element: <Updatesales />
-        }
+        // {
+        //   path: 'update-sales/:id',
+        //   element: <Updatesales />
+        // }
       ]
     },
    
