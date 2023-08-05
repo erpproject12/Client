@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { View_All } from '../../global';
+import { View_All_Return } from '../../global';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import {Link} from 'react-router-dom'
@@ -47,7 +47,7 @@ export default function CustomizedTables() {
   const [display,setDisplay]=useState([]);
 
   useEffect(()=>{
-    View_All(params.id)
+    View_All_Return(params.id)
     .then((res)=>{
       console.log("Product Response : " + JSON.stringify(res.data));
       setDisplay(res.data)
