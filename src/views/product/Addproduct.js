@@ -159,6 +159,7 @@ return(
             //   value={age}
             name='unit_of_masure'
             label="Tax Percentage"
+            required
           >
             <MenuItem value={10}>20%</MenuItem>
             <MenuItem value={20}>10%</MenuItem>

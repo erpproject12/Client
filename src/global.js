@@ -45,7 +45,7 @@ export const Insert_Purchase = (val) =>{
 }
 
 
-//sales
+
 
 export const Insert_Sales_Return = (val) =>{
     return url.post('/api/sale_insert_return',val)
@@ -66,6 +66,7 @@ export const Update_Sales_Return = (id,sales) =>{
 export const Delete_Sales_Return = (id) =>{
     return url.delete(`/api/delete_sales_return/${id}`)
 }
+
 
 //Purchase Return
 export const Insert_PurchaseReturn = (val) =>{
@@ -95,6 +96,26 @@ export const UpdateOpeningStock2 = (id,item) =>{
 
 
 
+
+
+
+
+// Sales
+export const Insert_Sales = (val) =>{
+    return url.post('/api/sales_insert',val)
+}
+export const View_Sales = () =>{
+    return url.get('/api/view_sales')
+}
+export const Delete_Sales = (id) =>{
+    return url.delete(`/api/delete_sales/${id}`)
+}
+export const Single_Sales = (id) => {
+    return url.get(`/api/view_sales/${id}`)
+}
+export const Update_Sales = (id) => {
+    return url.put(`/api/update_sales/${id}`)
+}
 
 
 const url = Axios.create({

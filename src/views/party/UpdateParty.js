@@ -26,7 +26,7 @@ import {
   Typography
   //   useMediaQuery
 } from '@mui/material';
-
+import { useNavigate } from 'react-router';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
@@ -35,6 +35,8 @@ import {
 
 
 const SamplePage = () =>{
+
+  const nav = useNavigate();
     let params=useParams();
   const [party,setParty]=useState({})
 
@@ -55,7 +57,8 @@ useEffect(()=>{
 const onSubmit=()=>{
     Update_Party(params.id,party)
     .then((res)=>{
-        console.log("Update Party:" +JSON.stringify(res.data))
+        console.log("Update Party:" +JSON.stringify(res.data));
+        nav('../../mparty/view-party')
        
     })
     .catch((err)=>{
