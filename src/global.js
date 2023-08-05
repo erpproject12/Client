@@ -22,6 +22,8 @@ export const DeleteProduct =(id)=>{
     return url.delete(`/api/delete/${id}`)
 }
 
+
+
 //party
 export const Insert_Party = (val) =>{
     return url.post('/api/party_insert',val)
@@ -93,10 +95,6 @@ export const UpdateOpeningStock1 = (id,stock) =>{
 export const UpdateOpeningStock2 = (id,item) =>{
     return url.put(`/api/update_openingstock2/${id}`,item)
 }
-
-
-
-
 
 
 

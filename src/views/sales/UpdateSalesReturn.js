@@ -17,7 +17,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
 import { useEffect } from 'react';
-import {View_All,Update_Sales} from '../../global';
+import {View_All_Return,Update_Sales} from '../../global';
 import { useParams } from 'react-router';
 import { View_Party,View_Product,Insert_Sales} from '../../global';
 const TableComponent = () => {
@@ -65,7 +65,7 @@ Tax:0
   };
   
   useEffect(()=>{
-    View_All(params.id)
+    View_All_Return(params.id)
     .then((res)=>{
         console.log("Sales_Return :" +JSON.stringify(res.data));
         setData(res.data)
