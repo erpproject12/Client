@@ -19,7 +19,7 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Swal from 'sweetalert2'
-import {View_Sales} from  '../../global';
+import {View_Sales_Return} from  '../../global';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -46,7 +46,7 @@ export default function CustomizedTables() {
   const [display,setDisplay]=useState([]);
 
   useEffect(()=>{
-    View_Sales()
+    View_Sales_Return()
     .then((res)=>{
       console.log("Sales Return Response : " + JSON.stringify(res.data));
       setDisplay(res.data)
@@ -68,7 +68,7 @@ export default function CustomizedTables() {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        Delete_Sales(id)
+        Delete_Sales_Return(id)
         .then((res)=>{
           console.log(res);
         })

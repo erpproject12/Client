@@ -20,7 +20,7 @@ import { useEffect } from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers';
-import { View_Party,View_Product,Insert_Sales} from '../../global';
+import { View_Party,View_Product,Insert_Sales_Return} from '../../global';
 const TableComponent = () => {
   const initialRow =
     {
@@ -104,7 +104,7 @@ const TableComponent = () => {
   })
   })
   const onSubmit = () =>{
-    Insert_Sales(data)
+    Insert_Sales_Return(data)
     .then((res)=>{
       console.log(res);
     })
