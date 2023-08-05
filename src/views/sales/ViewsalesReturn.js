@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { Delete_Sales } from '../../global';
+import { Delete_Sales_Return } from '../../global';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import {Link} from 'react-router-dom'
