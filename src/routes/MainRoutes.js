@@ -33,8 +33,13 @@ const Addsales = Loadable(lazy(() => import('views/sales/Addsales')));
 const Viewsales = Loadable(lazy(() => import('views/sales/Viewsales')));
 const AddsalesReturn = Loadable(lazy(() => import('views/sales/AddsalesReturn')));
 const ViewsalesReturn = Loadable(lazy(() => import('views/sales/ViewsalesReturn')));
+<<<<<<< HEAD
 const UpdateSalesReturn = Loadable(lazy(() => import('views/sales/UpdateSalesReturn')));
 const ViewAll = Loadable(lazy(() => import('views/sales/ViewAll')));
+=======
+const ViewAll = Loadable(lazy(() => import('views/sales/ViewAll')));
+const UpdateSalesReturn = Loadable(lazy(() => import('views/sales/UpdateSalesReturn')));
+>>>>>>> 93004e3948b8bde435680bebf223e515d39a80e0
 // const Updatepurchase = Loadable(lazy(() => import('views/purchase/Updatepurchase')));
 const Singlesales = Loadable(lazy(() => import('views/sales/Singlesales')));
 const Updatesales = Loadable(lazy(() => import('views/sales/Updatesales')));
