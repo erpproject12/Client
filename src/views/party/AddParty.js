@@ -62,8 +62,8 @@ return(
           '& .MuiTextField-root': { m: 1, width: '50ch' }
         }}
       >
-        <TextField id="outlined-basic" onChange={Change} label="Party Name" name='party_name' variant="outlined" />
-        <TextField id="outlined-basic" onChange={Change}  label="Party Contect Number" name='party_phone' variant="outlined" />
+        <TextField id="outlined-basic" onChange={Change} label="Party Name" required name='party_name' variant="outlined" />
+        <TextField id="outlined-basic" onChange={Change}  label="Party Contect Number" required name='party_phone' variant="outlined" />
       </Box>
     </FormControl>
     <FormControl>
@@ -73,7 +73,7 @@ return(
         }}
       >
         <TextField id="outlined-basic" onChange={Change} label="Party Email" name='party_email' variant="outlined" />
-        <TextField id="outlined-basic" onChange={Change}  label="Party address" name='party_address' variant="outlined" />
+        <TextField id="outlined-basic" onChange={Change}  required label="Party address" name='party_address' variant="outlined" />
       </Box>
     </FormControl>
     <FormControl>

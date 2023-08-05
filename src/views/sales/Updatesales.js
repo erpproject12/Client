@@ -25,12 +25,21 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useEffect } from 'react';
-import { View_Party,View_Product,Insert_Sales } from '../../global';
-
-
+import { View_Party,View_Product,Insert_Sales,Single_Sales,Update_Sales } from '../../global';
+import { useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 
 const TableComponent = () => {
-  
+
+  let nav = useNavigate();
+
+  let params=useParams();
+  const [sales,setSales]=useState({})
+
+
+
+
+
   const initialRow = {
     id: 1,
     ItemName: "",
@@ -44,26 +53,25 @@ const TableComponent = () => {
     Tax: 0,
     Total: 0
   }; // table inside values
-
-  const [DisAmount, setDisAmount] = useState(0);
   const [display,setDisplay]=useState([]); // it give product table names
   const [party,setParty]=useState([]);     // it will show party names
   const [formData, setFormData] = useState({
-    BillNo: "",
-    Party: "",
-    BillDate: "",
-    rows: [initialRow],
-    SubTotal: 0,
-    Discount: 0,
-    DisAmount: 0,
-    Vat: 0,
-    Freight: 0,
-    gtotal: 0
+  party_id:{party_name:""},
   });  // here state will store enter values
 
+  useEffect(()=>{
+    Single_Sales(params.id)
+      .then((res)=>{
+          console.log("Single Party:" +JSON.stringify(res.data))
+          setFormData(res.data)
+      })
+      .catch((err)=>{
+          console.log(err);
+      })
+  },[])
+  
 
 
-console.log(formData,9999)
   
 
   // ....................start................... billdate and bill number .............//
@@ -100,6 +108,7 @@ console.log(formData,9999)
 //............................................end ......................................................//
 
 
+
   useEffect(()=>{
     View_Product()
     .then((res)=>{
@@ -126,12 +135,14 @@ console.log(formData)
 
 
   const onSubmit = () =>{
-    Insert_Sales(formData)
+    Update_Sales(params.id,formData)
+    
     .then((res)=>{
-      console.log(res);
+      console.log('updated sales details:'+JSON.stringify(res.data));
+      
     })
     .catch((error)=>{
-      console.log(error)
+      console.log(error.message);
     })
   }
 
@@ -141,32 +152,32 @@ console.log(formData)
 
   useEffect(() => {
     recalculateAll();
-  }, [formData.rows,formData.Freight]);
+  }, [formData.item,formData.Freight]);
 
  
 
 
   const handleRowChange = (index, field, value) => {
-    const updatedRows = [...formData.rows];
+    const updatedRows = [...formData.item];
     updatedRows[index][field] = value;
     // Recalculate the Total for the current row
     updatedRows[index].Total = calculateRowTotal(updatedRows[index]);
     setFormData({
       ...formData,
-      rows: updatedRows
+      item: updatedRows
     });
   };
-
 
   const calculateRowTotal = (row) => {
     // Your logic to calculate the Total for a single row
     // For example: (Qty * PPrice) - Discount
-    const add = (row.Qty * row.PPrice * row.Discount)/100;
-    const discount = (row.Qty * row.PPrice)-add;
+    const add = (row.Qty * row.PPrice * row.Discount)/100; //discount price
+    
+    const discount = (row.Qty * row.PPrice)-add; //subtotal
     const tax = (discount*row.Tax)/100;
     const total = discount+tax;
-    console.log(total)
-    return total;
+    console.log(total);
+    return total ;
    
   };
 
@@ -180,27 +191,41 @@ console.log(formData)
    let vattotal=0;
    let freight=0;
    let grandTotal=0;
-    const subTotal = formData.rows.reduce((total, row) => total + (row.Qty * row.PPrice), 0);
-    const discount = formData.rows.reduce((dis, row) => dis + (row.Qty*row.PPrice)*row.Discount/100, 0);
-    const vat = formData.rows.reduce((vats, row) => vats + ((row.Qty*row.PPrice-(row.Qty*row.PPrice*row.Discount)/100)*row.Tax/100), 0);
+   let todis =0;
+   const subTotal = formData?.item?.reduce((total, row) => total + (row.Qty * row.PPrice), 0);
+   const discount = formData?.item?.reduce((dis, row) => dis = (subTotal)*row.Discount/100, 0);
+   const vat = formData?.item?.reduce((vats, row) => vats = (subTotal-discount)*row.Tax/100, 0);
 
-    // Calculate Discount, Vat, and Freight (replace these calculations with your desired logic)
-    distotal = subTotal-discount;
-    Vats=distotal+vat;
-     freight =  formData.Freight;
-     grandTotal =  Vats + freight
-    // Calculate grand total
-   
-console.log(vat,'vat')
-    // Update the formData state with the calculated values
-    setFormData({
-      ...formData,
-      SubTotal: subTotal,
-      Discount: discount,
-      Vat: vat,
-      gtotal: grandTotal
-    });
+   // Calculate Discount, Vat, and Freight (replace these calculations with your desired logic)
+  
+   distotal  = subTotal - discount;
+    // 10% discount
+    Vats = distotal+vat;
+
+    freight =  formData.Freight;
+    grandTotal =  Vats + freight;
+   // Calculate grand total
+  
+    const Expdatebill = (formData.sales_billdate)? formData.sales_billdate :"2023-07-01";
+    const Expdate = Expdatebill.split("T")[0];
+   // Update the formData state with the calculated values
+   setFormData({
+     ...formData,
+     sales_billdate:Expdate,
+     SubTotal: subTotal,
+     Discount: discount,
+     Vat: vat,
+     gtotal: grandTotal
+   });
+
+    console.log(subTotal,"sssssss");
+    console.log(discount,"ddddddd");
+    console.log(discounts,"final dis");
+    
+
+
   };
+ 
   
  // ..................................end..............................................//
  
@@ -212,7 +237,7 @@ console.log(vat,'vat')
   const handleAddRow = () => {
     setFormData({
       ...formData,
-      rows: [...formData.rows, { ...initialRow, id: formData.rows.length + 1 }]
+      item: [...formData.item, { ...initialRow, id: formData.item.length + 1 }]
       
     });
   };
@@ -220,7 +245,7 @@ console.log(vat,'vat')
 // ..........................end ................................................//
 
 
-console.log(formData.rows.Tax);
+// console.log(formData.rows.Tax);
 
 
 const handleFreight = (e) => {
@@ -230,10 +255,10 @@ const handleFreight = (e) => {
 };
 
   const handleDeleteRow = (index) => {
-    const updatedRows = formData.rows.filter((row, i) => i !== index);
+    const updatedRows = formData.item.filter((row, i) => i !== index);
     setFormData({
       ...formData,
-      rows: updatedRows
+      item: updatedRows
      
     });
     console.log(index); 
@@ -251,7 +276,7 @@ const handleFreight = (e) => {
        alert (selectedItem?._id)
        
        
-        const updatedRows = [...formData.rows];
+        const updatedRows = [...formData.item];
         // updatedRows[index]['Tax'] = value;
         // updatedRows[index]['ItemName']=value;
         updatedRows[index].ItemName = selectedItem?._id
@@ -263,6 +288,8 @@ const handleFreight = (e) => {
         });
     
         // alert(selectedItem?.tax_code);
+
+
       }
     }
   };
@@ -275,6 +302,7 @@ const handleFreight = (e) => {
       if(partyid){
         formData.Party=partyid?._id;
         
+
       }
     }
     setFormData({
@@ -285,29 +313,46 @@ const handleFreight = (e) => {
 
   // ...............................end.....auto(id).........................................
 
-  console.log(formData.BillDate)
+  console.log(formData,9999)
   
   return (
     <>
       <div>
         <Stack spacing={{ xs: 1 }} direction="row">
-          <TextField variant="outlined" label="Bill Number" required name="BillNo" onChange={handleInputChange} size="small" sx={{ width: 250, mb: 3 }} />
-          <FormControl sx={{ minWidth: 120 }}>
+        
+          <TextField 
+          variant="outlined"
+          label="Bill Number" 
+           name="sales_billno" 
+            value={formData?.sales_billno} 
+             onChange={handleInputChange} 
+              size="small" sx={{ width: 250, mb: 3 }} 
+              
+            />
             
-               
-          <Autocomplete
+
+          <FormControl sx={{ minWidth: 120 }}>
+     
+     <Autocomplete
             onChange={(e,value) => handleparty(value,"Party", e.target.value)}
       disablePortal
       id="combo-box-demo"
       size='small'
       options={party.map((item)=> item.party_name)}
       sx={{ width: 300 }}
-      required
+      value={formData?.party_id?.party_name}
       renderInput={(params) => <TextField {...params} label="Select Party Name" />}
     />
+      
           </FormControl>
 
-          <TextField type='date' size="small" name='BillDate' required  onChange={handleInputChange}/>
+          <TextField
+           type='date'
+            size="small" 
+            name='BillDate'
+            onChange={handleInputChange}
+          value= {formData?.sales_billdate}    
+            />
           
         </Stack>
         <TableContainer component={Paper}>
@@ -328,7 +373,7 @@ const handleFreight = (e) => {
               </TableRow>
             </TableHead>
             <TableBody>
-            {formData.rows.map((row, index) => (
+            {formData?.item?.map((row, index) => (
                 <TableRow key={row.id}>
                   <TableCell>{row.id}</TableCell>
                   <TableCell>
@@ -340,7 +385,7 @@ const handleFreight = (e) => {
             options={display.map((item) => item.product_name)}
             sx={{ borderRadius: 4, width: '30ch' }}
             onChange={(e, value) => handleAutocompleteChange(value, index)}
-     
+           value={row?.ItemName?.product_name}
             renderInput={(params) => <TextField {...params} label="Select Product Name" />}
           />
                   </TableCell>
@@ -351,6 +396,7 @@ const handleFreight = (e) => {
                       size="small"
                       sx={{ borderRadius: 4, width: '10ch' }}
                       onChange={(e) => handleRowChange(index, "Batch", e.target.value)}
+                      value={row?.Batch}
                     />
                   </TableCell>
                   <TableCell>
@@ -367,14 +413,12 @@ const handleFreight = (e) => {
                     />
                   </TableCell>
                   <TableCell>
-
                     <TextField
                       variant="outlined"
                       label="Qty"
                       sx={{ borderRadius: 4, width: '10ch' }}
                       size="small"
                       name="Qty"
-                      required
                      value={row.Qty}
                      onChange={(e)=>
                     handleRowChange(index,"Qty", parseInt(e.target.value))
@@ -398,7 +442,6 @@ const handleFreight = (e) => {
                     <TextField
                       variant="outlined"
                       label="Price"
-                      required
                       size="small"
                       sx={{ borderRadius: 4, width: '10ch' }}
                     value={row.PPrice}
@@ -414,9 +457,7 @@ const handleFreight = (e) => {
                       sx={{ borderRadius: 4, width: '10ch' }}
                       onChange={(e) =>
                         handleRowChange(index, "MRP", parseInt(e.target.value))
-                       
                       }
-                      required
                     />
                   </TableCell>
                   <TableCell>
@@ -458,19 +499,19 @@ const handleFreight = (e) => {
           </Button>
           
           <Button variant="contained" color="success" onClick={onSubmit} startIcon={<CheckIcon />}>
-            Submit
+            Update
           </Button>
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'end'}}>
           <div className="flex">
             <div className="pr-12">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '43px', marginBottom: '5px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '43px', marginBottom: '7px' }}>
                 <div className="mb-8">
                   <Typography variant="h5">Total :</Typography>
                 </div>
                 <div className="mr-4">
-                  <TextField variant="outlined"  name="subtotal" value={formData.SubTotal.toFixed(2)} label="Total" size="small" />
+                  <TextField variant="outlined"  name="subtotal" value={(formData.SubTotal ?? 0).toFixed(2)} label="Total" size="small" />
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '5px' }}>
@@ -478,32 +519,31 @@ const handleFreight = (e) => {
                   <Typography variant="h5"> Discount : </Typography>
                 </div>
                 <div>
-                  <TextField variant="outlined"  name="discount"  value={formData.Discount.toFixed(2)} label="Discount" size="small" />
-                  
+                  <TextField variant="outlined"  name="discount"  value={(formData.Discount ?? 0).toFixed(2)} label="Discount" size="small" />
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '50px', marginBottom: '5px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '50px', marginBottom: '7px' }}>
                 <div className="mb-8">
                   <Typography variant="h5"> VAT : </Typography>
                 </div>
                 <div>
-                  <TextField variant="outlined" name="vat" value={formData.Vat.toFixed(2)}  label="VAT" size="small" />
+                  <TextField variant="outlined" name="vat" value={(formData.Vat ?? 0).toFixed(2)}  label="VAT" size="small" />
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '34px', marginBottom: '5px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '34px', marginBottom: '7px' }}>
                 <div className="mb-8">
                   <Typography variant="h5"> Freight : </Typography>
                 </div>
                 <div>
-                  <TextField variant="outlined" onChange={handleFreight} label="Freight"  name="Freight"size="small" />
+                  <TextField variant="outlined" value={parseInt(formData.sales_freight)} onChange={(e)=>handleFreight("sales_freight",e.terget.value)} label="Freight"  name="Freight"size="small" />
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '5px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '7px' }}>
                 <div className="mb-8">
                   <Typography variant="h5"> Grand Total : </Typography>
                 </div>
                 <div>
-                  <TextField variant="outlined"  name="gtotal"  value={formData.gtotal.toFixed(2)} label="Grand Total" size="small" />
+                  <TextField variant="outlined"  name="gtotal"  value={formData.sales_gtotal} label="Grand Total" size="small" />
                 </div>
               </div>
 
@@ -514,8 +554,8 @@ const handleFreight = (e) => {
 
 
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: '20px',marginLeft:'150px'}}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '80px' }}>
-              <div className="mb-4">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '40px' }}>
+              <div className="mb-8">
                 <Typography variant="h5"> Select Credit Note : </Typography>
               </div>
               <div>
@@ -523,7 +563,7 @@ const handleFreight = (e) => {
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '3px', marginBottom: '80px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '40px' }}>
               <div className="mb-4">
                 <Typography variant="h5"> Select Purchase Bill : </Typography>
               </div>
@@ -540,7 +580,7 @@ const handleFreight = (e) => {
 
         <div style={{display:'flex',justifyContent: 'end'}}>
                 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
                   <div className="mb-4">
                     <Typography variant="h5"> To Pay : </Typography>
                   </div>
