@@ -35,16 +35,16 @@ const YourComponent = () => {
     ItemName: "",
     Batch: "",
     ExpDate: "",
-    Qty: 0,
+    Qty: 0, 
     Discount: 0,
     PPrice: 0,
     SPrice: "",
     MRP: "",
     Tax: 0,
     Total: 0
-  };
-  const [display,setDisplay]=useState([]);
-  const [party,setParty]=useState([]);
+  }; // table inside values
+  const [display,setDisplay]=useState([]); // it give product table names
+  const [party,setParty]=useState([]);     // it will show party names
   const [formData, setFormData] = useState({
     BillNo: "",
     Party: "",
@@ -55,7 +55,7 @@ const YourComponent = () => {
     Vat: 0,
     Freight: 0,
     gtotal: 0
-  });
+  });  // here state will store enter values
 
   useEffect(() => {
     recalculateAll();
@@ -109,7 +109,9 @@ console.log(formData)
     const discount = (row.Qty * row.PPrice)-add;
     const tax = (discount*row.Tax)/100;
     const total = discount+tax;
+    console.log(total)
     return total;
+   
   };
 
   const onSubmit = () =>{
@@ -176,8 +178,9 @@ console.log(formData.rows.Tax);
       rows: updatedRows
      
     });
-    
+    console.log(index); 
   };
+  
   const handleAutocompleteChange = (value,index) => {
     if (value) {
       // Find the selected item by its product_name

@@ -6,6 +6,7 @@ import MainCard from 'ui-component/cards/MainCard';
 import { useParams } from 'react-router';
 
 import { Single_Product, Update_Product } from '../../global';
+import { useNavigate } from 'react-router';
 
 import {
   Box,
@@ -31,6 +32,9 @@ import {
 // ==============================|| SAMPLE PAGE ||============================== //
 
 const SamplePage = () => {
+
+  let nav = useNavigate();
+
   let params = useParams();
   const [product, setProduct] = useState({});
   useEffect(() => {
@@ -62,6 +66,7 @@ const SamplePage = () => {
     Update_Product(params.id, product)
       .then((res) => {
         console.log('Updated Product :' + JSON.stringify(res.data));
+        nav('../../mproduct/view-product');
       })
       .catch((err) => {
         console.log(err.massege);

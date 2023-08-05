@@ -42,7 +42,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 export default function CustomizedTables() {
-  const [display,setDisplay]=useState([]);
+
+const [display,setDisplay]=useState([]);
 
   useEffect(()=>{
     View_Product()
@@ -120,8 +121,6 @@ export default function CustomizedTables() {
               <StyledTableCell >{item.date}</StyledTableCell>
               <StyledTableCell sx={{display:'flex'}}>
               <Link to={`/mproduct/single-product/${item._id}`} ><IconButton><RemoveRedEyeIcon sx={{color:'green'}}/></IconButton></Link>
-                <Link to={`/mproduct/update-product/${item._id}`}><IconButton><BorderColorIcon color="primary"/></IconButton></Link>
-                 <IconButton><DeleteOutlineIcon onClick={()=>{handleDelete(item._id)}} sx={{color:'red'}}/></IconButton>
                   </StyledTableCell>
             </StyledTableRow>
             )

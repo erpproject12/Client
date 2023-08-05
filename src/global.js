@@ -42,6 +42,26 @@ export const Insert_Purchase = (val) =>{
     return url.post('/api/purchase_insert',val)
 }
 
+
+
+
+// Sales
+export const Insert_Sales = (val) =>{
+    return url.post('/api/sales_insert',val)
+}
+export const View_Sales = () =>{
+    return url.get('/api/view_sales')
+}
+export const Delete_Sales = (id) =>{
+    return url.delete(`/api/delete_sales/${id}`)
+}
+export const Single_Sales = (id) => {
+    return url.get(`/api/view_sales/${id}`)
+}
+export const Update_Sales = (id) => {
+    return url.put(`/api/update_sales/${id}`)
+}
+
 const url = Axios.create({
     baseURL:"http://127.0.0.1:4000"
 })

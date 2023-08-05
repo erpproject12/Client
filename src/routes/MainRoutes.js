@@ -32,6 +32,8 @@ const Viewsales = Loadable(lazy(() => import('views/sales/Viewsales')));
 const AddsalesReturn = Loadable(lazy(() => import('views/sales/AddsalesReturn')));
 const ViewsalesReturn = Loadable(lazy(() => import('views/sales/ViewsalesReturn')));
 // const Updatepurchase = Loadable(lazy(() => import('views/purchase/Updatepurchase')));
+const Singlesales = Loadable(lazy(() => import('views/sales/Singlesales')));
+const Updatesales = Loadable(lazy(() => import('views/sales/Updatesales')));
 
 
 // utilities routing
@@ -150,12 +152,16 @@ const MainRoutes = {
         {
           path: 'view-sales-return',
           element: <ViewsalesReturn />
+        },
+        {
+          path: 'single-sales/:id',
+          element: <Singlesales />
+        },
+       
+        {
+          path: 'update-sales/:id',
+          element: <Updatesales />
         }
-        // ,
-        // {
-        //   path: 'update-purchase/:id',
-        //   element: <Updatepurchase />
-        // }
       ]
     },
    

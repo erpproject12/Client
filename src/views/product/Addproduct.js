@@ -34,6 +34,10 @@ import {
 
 
 const SamplePage = () =>{
+
+
+
+
   const [product,setProduct]=useState({})
 
   const Change=(e)=>{
@@ -61,8 +65,8 @@ return(
           '& .MuiTextField-root': { m: 1, width: '50ch' }
         }}
       >
-        <TextField id="outlined-basic" onChange={Change} label="Product Code" name='product_code' variant="outlined" />
-        <TextField id="outlined-basic" onChange={Change}  label="Product Name" name='product_name' variant="outlined" />
+        <TextField id="outlined-basic" onChange={Change} label="Product Code" required name='product_code' variant="outlined" />
+        <TextField id="outlined-basic" onChange={Change}  label="Product Name" required name='product_name' variant="outlined" />
       </Box>
     </FormControl>
 
@@ -127,6 +131,7 @@ return(
             //   value={age}
             name='unit_of_masure'
             label="Tax Percentage"
+            required
           >
             <MenuItem value={10}>20%</MenuItem>
             <MenuItem value={20}>10%</MenuItem>
