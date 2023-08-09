@@ -1,427 +1,415 @@
-import React, { useState } from 'react';
-import {
-  Button,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  TextField,
-  Typography
-} from '@mui/material';
-import Autocomplete from '@mui/material/Autocomplete';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add';
+import React, { useState, useEffect } from 'react';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { Button, Stack, TextField, Typography, Autocomplete, Checkbox, IconButton } from '@mui/material';
+import { View_Sales, Insert_Sales_Return } from '../../global';
 import CheckIcon from '@mui/icons-material/Check';
-import { useEffect } from 'react';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers';
-import { View_Party,View_Product,Insert_Sales_Return} from '../../global';
-const TableComponent = () => {
-  const initialRow =
-    {
-      id: 1,
-      ItemName: '',
-      Batch: '',
-      ExpDate: '',
-      Qty: '0',
-      Discount:0,
-      PPrice: '0',
-      MRP: '',
-      Tax:0,
-      Total:0
-    }
-    const [display,setDisplay]=useState([]);
-    const [party,setParty]=useState([]);
-  const [data, setData] = useState(
-{
-  BillNo:"",
-  Party:"",
-  BillDate:"",
-  rows:[initialRow],
-  SubTotal:0,
-  Discount:0,
-  Tax:0,
-  Freight:0,
-  gtotal:0,
-
-}
-  ); 
-  console.log(data);
-  const handleRowChange=(index,field,value)=>{
-   const updatedRows = [...data.rows];
-   updatedRows[index][field]=value;
-   updatedRows[index].Total = calculateRowTotal(updatedRows[index]);
-   setData({
-    ...data,
-    rows: updatedRows
-   })
-  }
-  const handleAutocompleteChange = (value,index) => {
-    if (value) {
-      // Find the selected item by its product_name
-      
-      const selectedItem = display.find((item) => item.product_name === value);
-      if (selectedItem) {
-      
-       
-       
-        const updatedRows = [...data.rows];
-        updatedRows[index]['Tax'] = value;
-        updatedRows[index]['ItemName']=value;
-        updatedRows[index].ItemName = selectedItem?._id
-        // Recalculate the Total for the current row
-        updatedRows[index].Tax = selectedItem?.tax_code
-        setData({
-          ...data,
-          rows: updatedRows
-        });
-    
-        // alert(selectedItem?.tax_code);
+import { useNavigate } from 'react-router';
 
 
-      }
+export default function DenseTable() {
+  const [sales, setSales] = React.useState([]);
+  const [party, setParty] = React.useState('');
+  const [invoice, setInvoice] = React.useState([]);
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
+  const [selectedInvoiceItems, setSelectedInvoiceItems] = useState([]);
+  const [returnDate, setReturnDate] = useState('');
+
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [subtotal, setSubtotal] = useState(0);
+  const [discountAmount, setDiscountAmount] = useState(0);
+  const [vat, setVat] = useState(0);
+  const [grandTotal, setGrandTotal] = useState(0);
+
+  // Create a separate state to keep track of selected items for each invoice
+  const [selectedItemsByInvoice, setSelectedItemsByInvoice] = useState({});
+let nav=useNavigate();
+  useEffect(() => {
+    View_Sales()
+      .then((res) => {
+        console.log('Party name' + JSON.stringify(res.data));
+        setSales(res.data);
+      })
+      .catch((error) => {
+        console.log('Error:' + error);
+      });
+  }, []);
+
+  const handleAutocompleteChange = (value) => {
+    const partyId = value ? value.party_id : null;
+    console.log(partyId);
+
+    if (partyId) {
+      // Filter the sales data based on the selected party_id
+      const selectedSales = sales.filter((item) => item.party_id._id === partyId._id);
+
+      const inn = selectedSales.map((invn) => invn.invoice_no);
+      setInvoice(inn);
+      setParty(partyId);
+    } else {
+      // If the selectedId is not found, reset the invoice array
+      setInvoice([]);
     }
   };
-  const handleparty=((value)=>{
-    if(value){
-        
-      const partyid = party.find((item)=>item.party_name === value)
-    
-      if(partyid){
-        data.Party=partyid?._id;
-        
 
-      }
+  console.log(party, 77);
+
+  const uniqueParties = sales.filter(
+    (sale, index, self) => index === self.findIndex((s) => s.party_id.party_name === sale.party_id.party_name)
+  );
+
+  const handleInvoiceItemClick = (invNo) => {
+    // Filter the sales data based on the selected invoice number
+    const selectedInvoiceItem = sales.filter((item) => item.invoice_no === invNo).flatMap((sale) => sale.item);
+
+    // Update the selectedInvoiceItems state with the items of the newly selected invoice
+    setSelectedInvoice(invNo);
+    setSelectedInvoiceItems(selectedInvoiceItem);
+
+    // Reset the selectedItems state when a new invoice is selected
+    setSelectedItems([]);
+  };
+
+  const handleCheckboxChange = (event, item) => {
+    const { checked } = event.target;
+    if (checked) {
+      setSelectedItems((prev) => [...prev, item]);
+    } else {
+      setSelectedItems((prev) => prev.filter((prevItem) => prevItem._id !== item._id));
     }
-    setData({
-      ...data,
-      
-  })
-  })
-  const onSubmit = () =>{
+  };
+
+  useEffect(() => {
+    if (selectedItems.length > 0) {
+      // Calculate sub total based on selected checkboxes
+      const subTotal = selectedItems.reduce((total, item) => total + item.Qty * item.PPrice, 0);
+      setSubtotal(subTotal);
+  
+      // Calculate discount amount based on a fixed discount percentage (e.g., 10%)
+      const discountPercentage = 10; // You can change this to your desired discount percentage
+      const discountAmt = (subTotal * discountPercentage) / 100;
+      setDiscountAmount(discountAmt);
+  
+      // Calculate VAT based on a fixed VAT percentage (e.g., 5%)
+      const vatPercentage = 5; // You can change this to your desired VAT percentage
+      const vatAmt = (subTotal - discountAmt) * (vatPercentage / 100);
+      setVat(vatAmt);
+  
+      // Calculate grand total
+      const grandTotalAmt = subTotal - discountAmt + vatAmt;
+      setGrandTotal(grandTotalAmt);
+    } else {
+      // If no items are selected (checkboxes unchecked), reset the values to zero
+      setSubtotal(0);
+      setDiscountAmount(0);
+      setVat(0);
+      setGrandTotal(0);
+    }
+  }, [selectedItems]);
+  //   // Update the selectedItemsByInvoice state when the selectedItems state changes
+  //   setSelectedItemsByInvoice((prev) => ({
+  //     ...prev,
+  //     [selectedInvoice]: selectedItems,
+  //   }));
+  // }, [selectedItems, selectedInvoice]);
+
+  console.log(returnDate);
+  const handleInputChange = (e) => {
+    alert(e.target.value);
+    setReturnDate(e.target.value);
+  };
+
+  const handleSubmit = () => {
+    // Gather the data for submission
+    const partyId = party._id;
+    console.log(partyId);
+    const invoiceNo = selectedInvoice;
+    const items = selectedItems;
+    const subTotal = subtotal;
+    const discountAmt = discountAmount;
+    const vatAmount = vat;
+    const grandTotalAmount = grandTotal;
+    const invBill = sales.find((item) => item.invoice_no === invoiceNo);
+    // if(invBill){
+    const billNo = invBill?.sales_billno;
+    const billDate = returnDate;
+
+    console.log(billNo);
+    // }
+
+    // Create a data object to send to the server
+    const data = {
+      partyId,
+      invoiceNo,
+      items,
+      subTotal,
+      discountAmount: discountAmt,
+      vatAmount,
+      grandTotalAmount,
+      billNo,
+      billDate
+    };
+
+    console.log(data);
     Insert_Sales_Return(data)
-    .then((res)=>{
-      console.log(res);
-    })
-    .catch((error)=>{
-      console.log(error)
-    })
-  }
-  const calculateRowTotal =(row) =>{
-    const discount = (row.Qty * row.PPrice * row.Discount )/100;
-    const totaldis = (row.Qty * row.PPrice)-discount;
-    const tax = (totaldis * row.Tax)/100;
-    const total = tax + totaldis;
-    return total;
-  
-  }
-
-useEffect(()=>{
-  recalculateAll();
-},[data.rows,data.Freight])
-
-const recalculateAll =() =>{
-  let discounts=0;
-  let Vats = 0;
- let distotal=0;
- let vattotal=0;
- let freight=0;
- let grandTotal=0;
- const subtotal = data?.rows?.reduce((total, row) => total + (row.Qty * row.PPrice), 0);
- const discount = data?.rows?.reduce((dis, row) => dis + (row.Qty * row.PPrice * row.Discount) / 100, 0);
- 
- const vat = data?.rows?.reduce((totalVat, row) => totalVat + ((row.Qty * row.PPrice - (row.Qty * row.PPrice * row.Discount) / 100) * row.Tax / 100), 0);
- 
-
-   // Calculate Discount, Vat, and Freight (replace these calculations with your desired logic)
-   discounts = subtotal-discount;
-  
-   //  distotal  = subtotal - discounts
-     // 10% discount
-   //   Vats = (distotal * vat ) ;
-     vattotal = (discounts + vat ) ;
-    freight =  data.Freight;
-    grandTotal =  vattotal + freight
-   // Calculate grand total
-console.log(vat,909);
-  setData({
-    ...data,
-    SubTotal:subtotal,
-    Discount:discount,
-    Tax:vat,
-    gtotal: grandTotal
-  })
-}
-
-
-  const handleFreight = (e) => {
-    
-    let Freight = parseInt(e.target.value);
-    setData({ ...data, [e.target.name]: Freight });
-    
+      .then((res) => {
+        console.log(res);
+        nav("/msales/view-sales-return")
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
- const handleAddRow = () =>{
-  setData({
-    ...data,
-    rows:[...data.rows,{...initialRow,id:data.rows.length+1}]
-  })
- }
- console.log(data);
- const handleDeleteRow = (index) =>{
-  const updatedRows = data.rows.filter((row,i)=> i !==index);
-  setData({
-    ...data,
-    rows:updatedRows
-  });
- };
- useEffect(()=>{
-  View_Product()
-  .then((res)=>{
-    console.log("Product Response : " + JSON.stringify(res.data));
-    setDisplay(res.data)
-  })
-  .catch((err)=>{
-    console.log("Error :" + err);
-  })
-},[])
- const handleInputChange = (e) =>{
-  setData({
-    ...data,[e.target.name]:e.target.value
-  })
-}
-console.log(data)
-  useEffect(()=>{
-    View_Party()
-    .then((res)=>{
-      console.log("Party name"+JSON.stringify(res.data));
-      setParty(res.data)
-    })
-    .catch((error)=>{
-      console.log("Error:"+error);
-    })
-  },[])
-console.log(data);
+
+  const styles = {
+    container: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }
+  };
+
+  const handleRowChange = (index, field, value) => {
+    const updatedRows = [...selectedInvoiceItems];
+    updatedRows[index][field] = value;
+    // Recalculate the Total for the current row
+    updatedRows[index].Total = calculateRowTotal(updatedRows[index]);
+    setSelectedInvoiceItems(updatedRows);
+  
+    // Trigger recalculation of totals
+    setSelectedItems(updatedRows.filter(item => selectedItems.includes(item)));
+  };
+
+  const calculateRowTotal = (row) => {
+    // Your logic to calculate the Total for a single row
+    // For example: (Qty * PPrice) - Discount
+    const add = (row.Qty * row.PPrice * row.Discount) / 100;
+    const discount = row.Qty * row.PPrice - add;
+    const tax = (discount * row.Tax) / 100;
+    const total = discount + tax;
+    return total;
+  };
+  console.log(selectedInvoiceItems);
+
   return (
     <>
-      <div>
-        <Stack spacing={{ xs: 1 }} direction="row">
-          <TextField variant="outlined" label="Bill Number" name="BillNo" size="small" onChange={handleInputChange} sx={{ width: 250, mb: 3 }} />
+      <div style={{ display: 'flex', gap: '20px' }}>
+        <div style={{ marginBottom: '30px' }}>
           <Autocomplete
-            onChange={(e,value) => handleparty(value,"Party", e.target.value)}
-      disablePortal
-      id="combo-box-demo"
-      size='small'
-      options={party.map((item)=> item.party_name)}
-      sx={{ width: 300 }}
-      renderInput={(params) => <TextField {...params} label="Select Party Name" />}
-    />
-
-<TextField type='date' size="small" name="BillDate"  onChange={handleInputChange}/>
-        </Stack>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>#</TableCell>
-                <TableCell style={{ width: 200 }}>Item Name</TableCell>
-                <TableCell>Batch</TableCell>
-                <TableCell>Exp.Date</TableCell>
-                <TableCell>Qty</TableCell>
-              
-                <TableCell>Discount</TableCell>
-                <TableCell>Price</TableCell>
-                <TableCell>MRP</TableCell>
-                <TableCell>Tax</TableCell>
-                <TableCell>Total</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data.rows.map((row,index) => (
-                <TableRow key={row.id}>
-                  <TableCell>{row.id}</TableCell>
-                  <TableCell>
-                  <Autocomplete
-                  key={index}
-      disablePortal
-      id="combo-box-demo"
-      name="product"
-      size='small'
-      options={display.map((item) => item.product_name)}
-      sx={{ width: 300 }}
-      onChange={(e, value) => handleAutocompleteChange(value, index,"ItemName",e.target.value)}
-      renderInput={(params) => <TextField {...params} label="Select Product" />}
-    />
-                  </TableCell>
-                  <TableCell>
-                    <TextField
-                      variant="outlined"
-                      label="Batch"
-                      size="small"
-                      sx={{ borderRadius: 4, width: '10ch' }}
-                     onChange={(e)=>handleRowChange(index,"Batch",e.target.value)}
-                     
-                    />
-                  </TableCell>
-                  <TableCell>
-                  <TextField
-                      variant="outlined"
-                     
-                      type="date"
-                      name='expDate'
-                      sx={{ borderRadius: 4, width: '15ch' }}
-                      size="small"
-                      value={row.col3}
-                      onChange={(e) => handleRowChange(index, "ExpDate", e.target.value)}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <TextField
-                      variant="outlined"
-                      label="Qty"
-                      sx={{ borderRadius: 4, width: '10ch' }}
-                      size="small"
-                      name="Qty"
-                      onChange={(e)=>handleRowChange(index,"Qty",e.target.value)}
-                      
-                    />
-                  </TableCell>
-
-                 
-                  <TableCell>
-                    <TextField
-                      variant="outlined"
-                      label="Discount"
-                      sx={{ borderRadius: 4, width: '10ch' }}
-                      size="small"
-                      onChange={(e) =>
-                        handleRowChange(index, "Discount", parseInt(e.target.value))
-                      }
-                     
-                    />
-                  </TableCell>
-
-                  <TableCell>
-                    <TextField
-                      variant="outlined"
-                      label="Price"
-                      size="small"
-                      sx={{ borderRadius: 4, width: '10ch' }}
-                      onChange={(e) =>
-                        handleRowChange(index, "PPrice", parseInt(e.target.value))
-                      }
-                     
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <TextField
-                      variant="outlined"
-                      label="MRP"
-                      size="small"
-                      sx={{ borderRadius: 4, width: '10ch' }}
-                      onChange={(e) =>
-                        handleRowChange(index, "MRP", parseInt(e.target.value))
-                      }
-                     
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <TextField
-                      variant="outlined"
-                      label="Tax"
-                      size="small"
-                      value={row?.Tax}
-                      sx={{ borderRadius: 4, width: '10ch' }}
-                      onChange={(e) =>
-                        handleRowChange(index, "Tax", parseInt(e.target.value))
-                      }
-                     
-                    />
-                  </TableCell>
-
-                  <TableCell>
-                    <TextField
-                      variant="outlined"
-                      label="Total"
-                      size="small"
-                      sx={{ borderRadius: 0, width: '10ch' }}
-                      value={calculateRowTotal(row)}
-                      onChange={(e) =>
-                        handleRowChange(index, "Total", parseInt(e.target.value))
-                      }
-                     
-                    />
-                  </TableCell>
-                  <TableCell>
-                  <DeleteIcon onClick={() => handleDeleteRow(index)} color='error' style={{cursor:'pointer'}}/>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <div style={{ marginTop: '20px', display: 'flex', gap: '5px' }}>
-          <Button variant="contained" color="primary" onClick={handleAddRow} startIcon={<AddIcon />}>
-            Add Item
-          </Button>
-          
-          <Button variant="contained" color="success" onClick={onSubmit}  startIcon={<CheckIcon />}>
-            Submit
-          </Button>
+            onChange={(e, value) => handleAutocompleteChange(value)}
+            disablePortal
+            id="combo-box-demo"
+            name="party"
+            size="small"
+            options={uniqueParties}
+            getOptionLabel={(option) => option.party_id.party_name} // Display the party_name in the options
+            sx={{ width: 300 }}
+            renderInput={(params) => <TextField {...params} label="Select Party" />}
+          />
         </div>
-        <div style={{ display: 'flex', justifyContent: 'end' }}>
-          <div className="flex">
-            <div className="pr-12">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '7px' }}>
-                <div className="mb-8">
-                  <Typography variant="h5" >Sub Total :</Typography>
-                </div>
-                <div className="mr-4">
-                  <TextField variant="outlined" value={data.SubTotal} label="Sub Total" size="small" />
-                </div>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '5px' }}>
-                <div className="mb-8">
-                  <Typography variant="h5"> Discount : </Typography>
-                </div>
-                <div>
-                  <TextField variant="outlined" value={data.Discount} label="Discount" size="small" />
-                </div>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '50px', marginBottom: '7px' }}>
-                <div className="mb-8">
-                  <Typography variant="h5"> VAT : </Typography>
-                </div>
-                <div>
-                  <TextField variant="outlined"  label="VAT" value={data.Tax} size="small" />
-                </div>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '34px', marginBottom: '7px' }}>
-                <div className="mb-8">
-                  <Typography variant="h5"> Freight : </Typography>
-                </div>
-                <div>
-                  <TextField variant="outlined" label="Freight" name='Freight' onChange={handleFreight} size="small" />
-                </div>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '7px' }}>
-                <div className="mb-8">
-                  <Typography variant="h5" > Grand Total : </Typography>
-                </div>
-                <div>
-                  <TextField variant="outlined" value={data.gtotal} label="Grand Total" size="small" />
+        <div>
+          <TextField type="date" size="small" name="billDate" onChange={handleInputChange} required />
+        </div>
+      </div>
+      <div style={{ display: 'flex', gap: '10px' }}>
+        {invoice != '' ? (
+          <div>
+            <TableContainer component={Paper}>
+              <Table size="large" aria-label="a dense table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Invoice Number</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {invoice.map((inv, index) => (
+                    <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                      <TableCell component="th" scope="row">
+                        <Button
+                          onClick={() => handleInvoiceItemClick(inv)}
+                          style={{
+                            backgroundColor: selectedInvoice === inv ? 'green' : 'inherit',
+                            color: selectedInvoice === inv ? 'white' : 'inherit'
+                          }}
+                        >
+                          {inv}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        ) : (
+          ''
+        )}
+
+        <div>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 1200 }} size="large" aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  <TableCell></TableCell>
+                  <TableCell>Item Name</TableCell>
+                  <TableCell align="right">Batch Number</TableCell>
+                  <TableCell align="right">Qty</TableCell>
+                  <TableCell align="right">Price</TableCell>
+                  <TableCell align="right">MRP</TableCell>
+                  <TableCell align="right">Discount</TableCell>
+                  <TableCell align="right">Tax(GST%)</TableCell>
+                  <TableCell align="right">Total</TableCell>
+                </TableRow>
+              </TableHead>
+
+              {selectedInvoiceItems != '' ? (
+                <>
+                  <TableBody>
+                    {selectedInvoiceItems.map((item, index) => (
+                      <TableRow key={item.index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                        <TableCell>
+                          <Checkbox onChange={(event) => handleCheckboxChange(event, item)} />
+                        </TableCell>
+                        <TableCell>
+                          <Typography>{item?.ItemName?.product_name}</Typography>
+                        </TableCell>
+                        <TableCell align="right">{item?.Batch}</TableCell>
+                        <TableCell align="right">
+                          <div>
+                            {selectedItems.includes(item) ? ( // Check if the item is in selectedItems
+                              <div>
+                                <TextField
+                                  id="filled-basic"
+                                  onChange={(e) => handleRowChange(index, 'Qty', parseInt(e.target.value))}
+                                  sx={{ width: '50px', '& input': { textAlign: 'center' } }}
+                                  variant="standard"
+                                  value={item?.Qty}
+                                />
+                              </div>
+                            ) : (
+                              item?.Qty // Display the regular quantity value
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell align="right">{item?.PPrice}</TableCell>
+                        <TableCell align="right">{item?.MRP}</TableCell>
+                        <TableCell align="right">{item?.Discount}</TableCell>
+                        <TableCell align="right">{item?.Tax}</TableCell>
+                        <TableCell align="right">{item?.Total}</TableCell>
+                        {/* Add other table cells here */}
+                      </TableRow>
+                    ))}{' '}
+                  </TableBody>
+                </>
+              ) : (
+                <TableBody>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '100%',
+                      padding: '10px',
+                      border: '1px solid red'
+                    }}
+                  >
+                    <Typography variant="h4">No records</Typography>
+                  </div>
+                </TableBody>
+              )}
+            </Table>
+          </TableContainer>
+
+          <div style={{ marginTop: '10px' }}>
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              color="success"
+              size="large"
+              startIcon={<CheckIcon sx={{ color: 'white' }} />}
+              style={{ color: 'white' }}
+            >
+              Submit
+            </Button>
+          </div>
+          {selectedInvoice != null ? (
+            <div style={{ display: 'flex', justifyContent: 'end' }}>
+              <div className="flex">
+                <div className="pr-12">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '19px', marginBottom: '5px' }}>
+                    <div className="mb-8">
+                      <Typography variant="h5">Sub Total :</Typography>
+                    </div>
+                    <div className="mr-4">
+                      <TextField
+                        variant="outlined"
+                        name="subtotal"
+                        label="Total"
+                        size="small"
+                        value={subtotal}
+                        InputProps={{ readOnly: true }}
+                      />
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '5px' }}>
+                    <div className="mb-8">
+                      <Typography variant="h5"> Discount : </Typography>
+                    </div>
+                    <div>
+                      <TextField
+                        variant="outlined"
+                        name="discount"
+                        label="Discount"
+                        size="small"
+                        value={discountAmount}
+                        InputProps={{ readOnly: true }}
+                      />
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '50px', marginBottom: '5px' }}>
+                    <div className="mb-8">
+                      <Typography variant="h5"> VAT : </Typography>
+                    </div>
+                    <div>
+                      <TextField variant="outlined" name="vat" label="VAT" size="small" value={vat} InputProps={{ readOnly: true }} />
+                    </div>
+                  </div>
+                  {/* <div style={{ display: 'flex', alignItems: 'center', gap: '34px', marginBottom: '5px' }}>
+                  <div className="mb-8">
+                    <Typography variant="h5"> Freight : </Typography>
+                  </div>
+                  <div>
+                    <TextField variant="outlined" label="Freight" name="Freight" size="small" />
+                  </div>
+                </div> */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '5px' }}>
+                    <div className="mb-8">
+                      <Typography variant="h5"> Grand Total : </Typography>
+                    </div>
+                    <div>
+                      <TextField
+                        variant="outlined"
+                        name="gtotal"
+                        label="Grand Total"
+                        size="small"
+                        value={grandTotal}
+                        InputProps={{ readOnly: true }}
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          ) : (
+            ''
+          )}
         </div>
       </div>
     </>
   );
-};
-
-export default TableComponent;
+}

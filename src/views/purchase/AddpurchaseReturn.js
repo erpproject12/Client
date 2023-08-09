@@ -61,12 +61,49 @@ const YourComponent = () => {
     recalculateAll();
   }, [formData.rows, formData.Freight]);
 
+
+  const [purchasereturncode, setPurchasereturncode]= useState({
+    bill_no:''
+
+  });
+
+  const [error, setError] = useState({
+    bill_no:false
+  });
+
   const handleInputChange = (field, value) => {
     setFormData({
       ...formData,
       [field]: value
     });
+    
+    setPurchasereturncode((prevPurchase) => ({ ...prevPurchase, [e.target.name]:e.target.value }));
+  setError((prevErrors) => ({ ...prevErrors, [e.target.name]:e.target.value === '' }));
+
   };
+
+
+
+  const onSubmit = () => {
+
+const newError={
+  bill_no:purchasereturncode.bill_no === ''
+}
+
+setError(newError);
+if(!newError.bill_no){
+    Insert_PurchaseReturn(formData)
+
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    }
+  };
+
 
   const handleRowChange = (index, field, value) => {
     const updatedRows = [...formData.rows];
@@ -109,15 +146,7 @@ const YourComponent = () => {
     return total;
   };
 
-  const onSubmit = () => {
-    Insert_PurchaseReturn(formData)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+
   const recalculateAll = () => {
     // Calculate SubTotal
     let discounts = 0;
@@ -218,9 +247,16 @@ const YourComponent = () => {
           label="Bill Number"
           name="bill_no"
           size="small"
+          value={purchasereturncode.bill_no}
+          error={error.bill_no}
           onChange={(e) => handleInputChange('BillNo', e.target.value)}
           sx={{ width: 250, mb: 3 }}
         />
+              {error.bill_no && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
+
+
         <FormControl sx={{ minWidth: 120 }}>
           <Autocomplete
             onChange={(e, value) => handleparty(value, 'Party', e.target.value)}

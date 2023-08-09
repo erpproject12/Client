@@ -91,7 +91,7 @@ const [display,setDisplay]=useState([]);
     <div>
     <Box sx={{display:'flex',justifyContent:'end',mb:'10px'}}>
     <Button variant="contained" startIcon={<AddIcon />}>
-   <Link to={'/mpurchase/add-purchase'} style={{textDecoration:'none',color:'white'}}>Add Purchase</Link>
+   <Link to={'/mpurchase/add-purchase'} style={{textDecoration:'none',color:'white'}}>Add Product</Link>
 </Button>
      
     </Box>

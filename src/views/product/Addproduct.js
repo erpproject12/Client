@@ -15,6 +15,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  FormHelperText,
   //   FormControlLabel,
   //   FormHelperText,
   //   Grid,
@@ -34,7 +35,10 @@ import {
 
 
 const SamplePage = () =>{
-  const [on,setOn]=useState(false)
+  const [on,setOn]=useState({
+    product_code:false,
+    product_name:false
+  })
   const [product,setProduct]=useState({});
  
   useEffect(()=>{
@@ -50,15 +54,42 @@ const SamplePage = () =>{
   const Change=(e)=>{
   setProduct({...product,[e.target.name]:e.target.value})
 
+
+  setProductCode((prevProduct) => ({ ...prevProduct, [e.target.name]:e.target.value }));
+  setError((prevErrors) => ({ ...prevErrors, [e.target.name]:e.target.value === '' }));
   }
-  
+  const [productCode, setProductCode] = useState({
+    product_code:'',
+    product_name:'',
+    tax_code:'',
+    HSN:''
+  });
+  const [error, setError] = useState({
+    product_code:false,
+    product_name:false,
+    tax_code:false,
+    HSN:false
+  });
+  console.log(productCode,88);
+ 
   const onSubmit=(e)=>{
     e.preventDefault();//this is used for from tag
     setOn(false)
-      // console.log();
-      Insert_Product(product)
+    
+    const newError = {
+      product_code: productCode.product_code === '',
+      product_name: productCode.product_name === '',
+      tax_code: productCode.tax_code === '',
+      HSN: productCode.HSN === '',
+    };
+
+    setError(newError);
+    if (!newError.product_code&&!newError.HSN&&!newError.tax_code&&!newError.product_name) {
+ Insert_Product(product)
       .then((res)=>{
         console.log(res)
+
+
         if(res.data.copy){
           setOn(true)
        
@@ -67,6 +98,9 @@ const SamplePage = () =>{
   .catch((error)=>{
   console.log("Error :"+ error)
   })
+    }
+      // console.log();
+     
   }
 
 
@@ -79,7 +113,22 @@ return(
           '& .MuiTextField-root': { m: 1, width: '50ch' }
         }}
       >
-        <TextField id="outlined-basic" onChange={Change} label="Product Code" name='product_code' variant="outlined" />
+         {/* <InputLabel htmlFor="product-code">Product Code</InputLabel> */}
+         <TextField
+        id="product-code"
+        label="Product Code"
+        variant="outlined"
+        name="product_code"
+        helperText={on.product_code && "Entered Product Code Already Exists"}
+        FormHelperTextProps={{ style: { color: 'red' } }}
+        value={productCode.product_code}
+        onChange={Change}
+        error={error.product_code}
+      />
+      {error.product_code && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
+
 
         <TextField
         id="outlined-basic"
@@ -87,10 +136,14 @@ return(
         label="Product Name"
         name="product_name"
         variant="outlined"
-       helperText={on && "Entered Product Already Exists"}
+       helperText={on.product_name && "Entered Product Already Exists"}
         FormHelperTextProps={{ style: { color: 'red' } }}
+        value={productCode.product_name}
+        error={error.product_name}
       />
-        
+        {error.product_name && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
      
 
       </Box>
@@ -106,13 +159,18 @@ return(
         //   value={age}
         name='tax_code'
         label="Tax Percentage"
+        error={error.tax_code}
+        value={productCode.tax_code}
       >
+       
         <MenuItem value={20}>20%</MenuItem>
         <MenuItem value={10}>10%</MenuItem>
         <MenuItem value={30}>3%</MenuItem>
       </Select>
-      
-       <TextField id="outlined-basic" onChange={Change}  label="HSN" name='HSN' variant="outlined" />
+      {error.tax_code && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
+       
     </FormControl>
     <Box sx={{ m: 1 }}>
       <FormControl fullWidth>
@@ -130,7 +188,7 @@ return(
         }}
       >
         <TextField id="outlined-basic" onChange={Change}  nam label="Rack Number" name='rack_no' variant="outlined" />
-        <TextField id="outlined-basic" onChange={Change}  label="HSN" name='HSN' variant="outlined" />
+       
       </Box>
     </FormControl>
     <FormControl>
@@ -140,7 +198,8 @@ return(
         }}
       >
         <TextField id="outlined-basic" onChange={Change}  label="Category" name='category' variant="outlined" />
-        <TextField id="outlined-basic" onChange={Change}  label="Manufacturer" name='manufactures' variant="outlined" />
+        <TextField id="outlined-basic" onChange={Change} 
+         label="Manufacturer" name='manufactures' variant="outlined" />
       </Box>
     </FormControl>
     <FormControl>
