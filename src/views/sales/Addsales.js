@@ -126,6 +126,7 @@ console.log(formData)
 
 
   const onSubmit = () =>{
+    
     Insert_Sales(formData)
     .then((res)=>{
       console.log(res);
