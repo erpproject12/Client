@@ -56,6 +56,7 @@ const dashboard = {
           title: 'New Purchase',
           type: 'item',
           url: '/mpurchase/view-purchase',
+          breadcrumbs: true
         
         },
         {
@@ -63,6 +64,7 @@ const dashboard = {
           title: 'Purchase Return',
           type: 'item',
           url: '/mpurchase/view-purchase-return',
+          breadcrumbs: true
          
         }
       ]
@@ -78,13 +80,15 @@ const dashboard = {
           id: 'view-sales',
           title: 'New Sales',
           type: 'item',
-          url: '/msales/view-sales'
+          url: '/msales/view-sales',
+          breadcrumbs: true
         },
         {
           id: 'view-sales-return',
           title: 'Sales Return',
           type: 'item',
-          url: '/msales/view-sales-return'
+          url: '/msales/view-sales-return',
+          breadcrumbs: true
         }
       ]
     },
@@ -100,6 +104,7 @@ const dashboard = {
           title: 'Opening Stock',
           type: 'item',
           url: '/mstock/view-opening-stocks',
+          breadcrumbs: true
         
         }
       ]
@@ -116,7 +121,7 @@ const dashboard = {
           title: 'Reciept',
           type: 'item',
           url: '/account/reciept',
-        
+          breadcrumbs: true
         }
       ]
     }
