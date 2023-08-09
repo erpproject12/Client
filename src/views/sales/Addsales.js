@@ -82,13 +82,14 @@ console.log(formData,9999)
 
   
   // <TextField  onChange={(e) => handleInputChange("BillDate", e.target.value)}/>
-           
-
+ 
 
   const handleInputChange = (e) => {
     setFormData({
       ...formData,[e.target.name]:e.target.value
       
+
+
     });
    
   };
