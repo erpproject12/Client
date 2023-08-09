@@ -100,6 +100,9 @@ const TableComponent = () => {
   }, []);
   console.log(formData);
 
+
+    
+
   useEffect(() => {
     View_Party()
       .then((res) => {
@@ -112,6 +115,7 @@ const TableComponent = () => {
   }, []);
 
   const onSubmit = () => {
+
     Insert_Sales(formData)
       .then((res) => {
         console.log(res);
