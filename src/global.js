@@ -115,8 +115,14 @@ export const Update_Sales = (id) => {
     return url.put(`/api/update_sales/${id}`)
 }
 
+//Admin Registration
+export const Admin_Insert = (val)=>{
+    return url.post('/api/admin_register',val)
+}
 
-
+export const Admin_login = (val)=>{
+    return url.post('/api/admin_login',val)
+}
 
 const url = Axios.create({
     baseURL:"http://127.0.0.1:4000"
