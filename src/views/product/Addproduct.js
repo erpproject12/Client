@@ -61,14 +61,14 @@ const SamplePage = () =>{
   const [productCode, setProductCode] = useState({
     product_code:'',
     product_name:'',
-    tax_code:'',
-    HSN:''
+    tax_code:''
+    
   });
   const [error, setError] = useState({
     product_code:false,
     product_name:false,
-    tax_code:false,
-    HSN:false
+    tax_code:false
+    
   });
   console.log(productCode,88);
  
@@ -80,11 +80,11 @@ const SamplePage = () =>{
       product_code: productCode.product_code === '',
       product_name: productCode.product_name === '',
       tax_code: productCode.tax_code === '',
-      HSN: productCode.HSN === '',
+     
     };
 
     setError(newError);
-    if (!newError.product_code&&!newError.HSN&&!newError.tax_code&&!newError.product_name) {
+    if (!newError.product_code&&!newError.tax_code&&!newError.product_name) {
  Insert_Product(product)
       .then((res)=>{
         console.log(res)
@@ -188,7 +188,7 @@ return(
         }}
       >
         <TextField id="outlined-basic" onChange={Change}  nam label="Rack Number" name='rack_no' variant="outlined" />
-       
+        <TextField id="outlined-basic" onChange={Change}  label="HSN" name='HSN' variant="outlined" />
       </Box>
     </FormControl>
     <FormControl>

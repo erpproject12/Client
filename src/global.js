@@ -46,6 +46,18 @@ export const Insert_Purchase = (val) =>{
     return url.post('/api/purchase_insert',val)
 }
 
+export const View_Purchase = () =>{
+    return url.get('/api/view_purchase')
+}
+
+export const View_All_Purchase = (id) =>{
+    return url.get(`/api/view_purchase/${id}`)
+}
+
+export const Delete_Purchase = (id) =>{
+    return url.delete(`/api/delete_purchase/${id}`)
+}
+
 
 
 
