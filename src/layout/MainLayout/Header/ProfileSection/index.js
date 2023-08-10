@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import Link from '@mui/material/Link';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -35,7 +36,7 @@ import MainCard from 'ui-component/cards/MainCard';
 import Transitions from 'ui-component/extended/Transitions';
 import UpgradePlanCard from './UpgradePlanCard';
 import User1 from 'assets/images/users/user-round.svg';
-
+import LoginIcon from '@mui/icons-material/Login';
 // assets
 import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons';
 
@@ -57,6 +58,14 @@ const ProfileSection = () => {
   const anchorRef = useRef(null);
   const handleLogout = async () => {
     console.log('Logout');
+  };
+  const handleLogin = async () => {
+    console.log('Login');
+    navigate("/pages/login/login3")
+  };
+  const handleRegister = async () => {
+    console.log('Login');
+    navigate("/pages/register/register3")
   };
 
   const handleClose = (event) => {
@@ -286,6 +295,26 @@ const ProfileSection = () => {
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 4}
+                          onClick={handleRegister}
+                        >
+                          <ListItemIcon>
+                            <LoginIcon stroke={1.5} size="1.3rem" />
+                          </ListItemIcon>
+                          <ListItemText primary={<Typography variant="body2">Register</Typography>} />
+                        </ListItemButton>
+                        <ListItemButton
+                          sx={{ borderRadius: `${customization.borderRadius}px` }}
+                          selected={selectedIndex === 4}
+                          onClick={handleLogin}
+                        >
+                          <ListItemIcon>
+                            <LoginIcon stroke={1.5} size="1.3rem" />
+                          </ListItemIcon>
+                          <ListItemText primary={<Typography variant="body2">Login</Typography>} />
+                        </ListItemButton>
+                        <ListItemButton
+                          sx={{ borderRadius: `${customization.borderRadius}px` }}
+                          selected={selectedIndex === 4}
                           onClick={handleLogout}
                         >
                           <ListItemIcon>
@@ -293,6 +322,7 @@ const ProfileSection = () => {
                           </ListItemIcon>
                           <ListItemText primary={<Typography variant="body2">Logout</Typography>} />
                         </ListItemButton>
+                       
                       </List>
                     </Box>
                   </PerfectScrollbar>

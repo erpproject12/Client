@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-
+import {Admin_Insert} from '../../../../global';
 // material-ui
+import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import {
   Box,
@@ -48,11 +49,14 @@ const FirebaseRegister = ({ ...others }) => {
 
   const [strength, setStrength] = useState(0);
   const [level, setLevel] = useState();
-
+const [register,setRegister]=useState({})
   const googleHandler = async () => {
     console.error('Register');
   };
-
+  const handleChange =(e)=>{
+    
+    setRegister({...register,[e.target.name]:e.target.value})
+  }
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -65,12 +69,27 @@ const FirebaseRegister = ({ ...others }) => {
     const temp = strengthIndicator(value);
     setStrength(temp);
     setLevel(strengthColor(temp));
+    
   };
-
+  const navigate = useNavigate();
+ const handleSubmit = (e) =>{
+ 
+  e.preventDefault()
+  Admin_Insert(register)
+  .then((res)=>{
+    console.log(res)
+    navigate("/pages/login/login3")
+  })
+  .catch((err)=>{
+    console.log("error"+err)
+  })
+ }
   useEffect(() => {
     changePassword('123456');
   }, []);
+ 
 
+console.log(register,8888)
   return (
     <>
       <Grid container direction="column" justifyContent="center" spacing={2}>
@@ -150,40 +169,33 @@ const FirebaseRegister = ({ ...others }) => {
           }
         }}
       >
-        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-          <form noValidate onSubmit={handleSubmit} {...others}>
-            <Grid container spacing={matchDownSM ? 0 : 2}>
-              <Grid item xs={12} sm={6}>
+        {({ errors, isSubmitting, touched, values }) => (
+          <form noValidate  {...others}>
+         
+              
+              <  FormControl fullWidth>
                 <TextField
-                  fullWidth
+                  onChange={handleChange}
                   label="First Name"
                   margin="normal"
-                  name="fname"
+                  name="name"
+                 
                   type="text"
                   defaultValue=""
                   sx={{ ...theme.typography.customInput }}
                 />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Last Name"
-                  margin="normal"
-                  name="lname"
-                  type="text"
-                  defaultValue=""
-                  sx={{ ...theme.typography.customInput }}
-                />
-              </Grid>
-            </Grid>
+                </FormControl>
+            
+             
+            
             <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
               <InputLabel htmlFor="outlined-adornment-email-register">Email Address / Username</InputLabel>
               <OutlinedInput
                 id="outlined-adornment-email-register"
                 type="email"
-                value={values.email}
+                
                 name="email"
-                onBlur={handleBlur}
+                
                 onChange={handleChange}
                 inputProps={{}}
               />
@@ -199,10 +211,10 @@ const FirebaseRegister = ({ ...others }) => {
               <OutlinedInput
                 id="outlined-adornment-password-register"
                 type={showPassword ? 'text' : 'password'}
-                value={values.password}
+               
                 name="password"
                 label="Password"
-                onBlur={handleBlur}
+                
                 onChange={(e) => {
                   handleChange(e);
                   changePassword(e.target.value);
@@ -271,7 +283,7 @@ const FirebaseRegister = ({ ...others }) => {
 
             <Box sx={{ mt: 2 }}>
               <AnimateButton>
-                <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="secondary">
+                <Button  fullWidth onClick={handleSubmit} size="large"  variant="contained" color="secondary">
                   Sign up
                 </Button>
               </AnimateButton>
