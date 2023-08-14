@@ -67,7 +67,7 @@ const onSubmit=(e)=>{
     if(res.data.success == true){
       console.log("login Successfull")
       localStorage.setItem("token",res.data.authtoken)
-
+      
     }else{
       console.log("some error occured")
     }
