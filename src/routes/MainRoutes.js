@@ -36,7 +36,7 @@ const ViewsalesReturn = Loadable(lazy(() => import('views/sales/ViewsalesReturn'
 const UpdateSalesReturn = Loadable(lazy(() => import('views/sales/UpdateSalesReturn')));
 const ViewAll = Loadable(lazy(() => import('views/sales/ViewAll')));
 // const Updatepurchase = Loadable(lazy(() => import('views/purchase/Updatepurchase')));
-const Singlesales = Loadable(lazy(() => import('views/sales/Singlesales')));
+const Invoice = Loadable(lazy(() => import('views/sales/Invoice')));
 const Updatesales = Loadable(lazy(() => import('views/sales/Updatesales')));
 
 
@@ -175,6 +175,10 @@ const MainRoutes = {
         {
           path: 'update-sales-return/:id',
           element: <UpdateSalesReturn />
+        },
+        {
+          path: 'invoice/:id',
+          element: <Invoice />
         }
       ]
     },
@@ -203,16 +207,7 @@ const MainRoutes = {
           path: 'view_reciept',
           element: <ViewReciept />
         }
-        
-        
-        //   path: 'single-sales/:id',
-        //   element: <Singlesales />
-        // },
-       
-        // {
-        //   path: 'update-sales/:id',
-        //   element: <Updatesales />
-        // }
+
       ]
     },
    
