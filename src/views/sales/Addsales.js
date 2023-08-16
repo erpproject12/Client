@@ -324,6 +324,7 @@ const TableComponent = () => {
             size="small"
             sx={{ width: 250, mb: 3 }}
           />
+
            {error.BillNo && (
         <FormHelperText error>This field is required</FormHelperText>
       )}
@@ -341,6 +342,7 @@ const TableComponent = () => {
            {error.Invoice && (
         <FormHelperText error>This field is required</FormHelperText>
       )}
+
           <FormControl sx={{ minWidth: 120 }}>
             <Autocomplete
               onChange={(e, value) => handleparty(value, 'Party', e.target.value)}

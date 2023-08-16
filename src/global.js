@@ -132,9 +132,22 @@ export const Admin_Insert = (val)=>{
     return url.post('/api/admin_register',val)
 }
 
+
+
+//Pay reciept
+export const Payment_Reciept_Insert=(val)=>{
+    return url.post('/api/payment_reciept_insert',val)
+}
+export const Payment_Reciept_View = () =>{
+    return url.get('/api/view_payment_reciept')
+}
+
+
 export const Admin_login = (val)=>{
     return url.post('/api/admin_login',val)
 }
+
+
 
 const url = Axios.create({
     baseURL:"http://127.0.0.1:4000"

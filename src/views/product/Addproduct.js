@@ -26,12 +26,19 @@ import {
   Typography
   //   useMediaQuery
 } from '@mui/material';
+
 import { useNavigate } from 'react-router';
+
+
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
 const SamplePage = () => {
+
   const nav = useNavigate();
+
   const [on, setOn] = useState({
     product_code: false,
     product_name: false
@@ -48,18 +55,25 @@ const SamplePage = () => {
         console.log('Error :' + err);
       });
   }, []);
+
   const Change = (e) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
 
     setProductCode((prevProduct) => ({ ...prevProduct, [e.target.name]: e.target.value }));
     setError((prevErrors) => ({ ...prevErrors, [e.target.name]: e.target.value === '' }));
   };
+
   const [productCode, setProductCode] = useState({
     product_code: '',
     product_name: '',
     tax_code: ''
+
   });
+
+
+
   const [error, setError] = useState({
+
     product_code: false,
     product_name: false,
     tax_code: false
@@ -95,12 +109,14 @@ const SamplePage = () => {
         .catch((error) => {
           console.log('Error :' + error);
         });
+
     }
     // console.log();
   };
 
   return (
     <MainCard title="Add Product Details">
+
       <Box
         sx={{
           
@@ -174,10 +190,12 @@ const SamplePage = () => {
       
       <Box sx={{ width: '108ch', mt: 3, marginBottom: '50px', marginTop: '5px' }}>
         <FormControl fullWidth sx={{ marginLeft: '50px' }}>
+
           <TextField
             id="outlined-multiline-static"
             onChange={Change}
             name="product_description"
+
             size="small"
             label="Product Description....."
             multiline
@@ -245,6 +263,7 @@ const SamplePage = () => {
         }}
       >
         <Button variant="contained" onClick={onSubmit} disableElevation>
+
           Add Product
         </Button>
       </Box>

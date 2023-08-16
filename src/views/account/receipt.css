@@ -1,0 +1,8 @@
+.partialPaidRow {
+  background-color: rgba(128, 172, 255, 0.7);  /* or any other styling you prefer */
+  
+}
+
+.paidRow {
+  background-color: rgba(128, 255, 128, 0.7); /* or any other styling you prefer */
+}

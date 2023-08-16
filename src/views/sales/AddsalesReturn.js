@@ -11,7 +11,6 @@ import { View_Sales, Insert_Sales_Return } from '../../global';
 import CheckIcon from '@mui/icons-material/Check';
 import { useNavigate } from 'react-router';
 
-
 export default function DenseTable() {
   const [sales, setSales] = React.useState([]);
   const [party, setParty] = React.useState('');
@@ -28,7 +27,7 @@ export default function DenseTable() {
 
   // Create a separate state to keep track of selected items for each invoice
   const [selectedItemsByInvoice, setSelectedItemsByInvoice] = useState({});
-let nav=useNavigate();
+  let nav = useNavigate();
   useEffect(() => {
     View_Sales()
       .then((res) => {
@@ -89,17 +88,17 @@ let nav=useNavigate();
       // Calculate sub total based on selected checkboxes
       const subTotal = selectedItems.reduce((total, item) => total + item.Qty * item.PPrice, 0);
       setSubtotal(subTotal);
-  
+
       // Calculate discount amount based on a fixed discount percentage (e.g., 10%)
       const discountPercentage = 10; // You can change this to your desired discount percentage
       const discountAmt = (subTotal * discountPercentage) / 100;
       setDiscountAmount(discountAmt);
-  
+
       // Calculate VAT based on a fixed VAT percentage (e.g., 5%)
       const vatPercentage = 5; // You can change this to your desired VAT percentage
       const vatAmt = (subTotal - discountAmt) * (vatPercentage / 100);
       setVat(vatAmt);
-  
+
       // Calculate grand total
       const grandTotalAmt = subTotal - discountAmt + vatAmt;
       setGrandTotal(grandTotalAmt);
@@ -159,7 +158,7 @@ let nav=useNavigate();
     Insert_Sales_Return(data)
       .then((res) => {
         console.log(res);
-        nav("/msales/view-sales-return")
+        nav('/msales/view-sales-return');
       })
       .catch((error) => {
         console.log(error);
@@ -180,9 +179,9 @@ let nav=useNavigate();
     // Recalculate the Total for the current row
     updatedRows[index].Total = calculateRowTotal(updatedRows[index]);
     setSelectedInvoiceItems(updatedRows);
-  
+
     // Trigger recalculation of totals
-    setSelectedItems(updatedRows.filter(item => selectedItems.includes(item)));
+    setSelectedItems(updatedRows.filter((item) => selectedItems.includes(item)));
   };
 
   const calculateRowTotal = (row) => {

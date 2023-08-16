@@ -58,11 +58,13 @@ const FirebaseRegister = ({ ...others }) => {
   const [level, setLevel] = useState();
 const [register,setRegister]=useState({})
 
+
 const [open, setOpen] = useState(false);
 
 const [on, setOn] =useState({
   email:false
 })
+
 
   const googleHandler = async () => {
     console.error('Register');
@@ -70,6 +72,7 @@ const [on, setOn] =useState({
   const handleChange =(e)=>{
     
     setRegister({...register,[e.target.name]:e.target.value})
+
 
 
     const emailRegex = /^[A-Za-z0-9._%+-]+@gmail\.com$/i;
@@ -89,6 +92,7 @@ const [on, setOn] =useState({
     } else{
     setError((prevErrors) => ({ ...prevErrors, [e.target.name]: e.target.value === '' }));
   }
+
   }
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -105,6 +109,7 @@ const [on, setOn] =useState({
     
   };
   const navigate = useNavigate();
+
 
   const [regvalidation, setRegvalidation]=useState({
       name:'',
@@ -149,10 +154,12 @@ const [on, setOn] =useState({
     }
 
     
+
   })
   .catch((err)=>{
     console.log("error"+err)
   })
+
 }
  }
 
@@ -165,6 +172,7 @@ const [on, setOn] =useState({
   // Close the alert by setting the open state to false
   setOpen(false);
 };
+
 
   useEffect(() => {
     changePassword('123456');
@@ -233,13 +241,17 @@ console.log(register,8888)
                   label="First Name"
                   margin="normal"
                   name="name"
+
                   value={regvalidation.name}
             error={error.name}
+
                   type="text"
                   defaultValue=""
                   sx={{ ...theme.typography.customInput }}
                 />
+
                 {error.name && <FormHelperText error>This field is required</FormHelperText>}
+
                 </FormControl>
             
              
@@ -251,8 +263,10 @@ console.log(register,8888)
                 type="email"
                 
                 name="email"
+
                 value={regvalidation.email}
                 error={error.email}
+
                 
                 onChange={handleChange}
                 inputProps={{}}
@@ -273,8 +287,10 @@ console.log(register,8888)
                
                 name="password"
                 label="Password"
+
                 value={regvalidation.password}
                 error={error.password}
+
                 onChange={(e) => {
                   handleChange(e);
                   changePassword(e.target.value);
@@ -328,6 +344,7 @@ console.log(register,8888)
               </Box>
             )}
 
+
 <Box sx={{ mt: 2 }}>
         <AnimateButton>
           <Stack spacing={2} sx={{ width: '100%' }}>
@@ -343,6 +360,7 @@ console.log(register,8888)
           </Stack>
         </AnimateButton>
       </Box>
+
           </form>
         )}
       </Formik>

@@ -122,6 +122,13 @@ const dashboard = {
           type: 'item',
           url: '/account/reciept',
           breadcrumbs: true
+        },
+        {
+          id: 'view_reciept',
+          title: 'View Reciept',
+          type: 'item',
+          url: '/account/view_reciept',
+          breadcrumbs: true
         }
       ]
     }

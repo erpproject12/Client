@@ -53,6 +53,7 @@ const FirebaseLogin = ({ ...others }) => {
   const customization = useSelector((state) => state.customization);
   const [checked, setChecked] = useState(true);
 
+
   const [open, setOpen] = useState(false);
 
 const [login,setLogin] = useState({})
@@ -69,6 +70,7 @@ const [login,setLogin] = useState({})
     event.preventDefault();
   };
 const handleChange = (e) =>{
+
   setLogin({...login,[e.target.name]:e.target.value});
 
   const emailRegex = /^[A-Za-z0-9._%+-]+@gmail\.com$/i;
@@ -112,12 +114,14 @@ const newError ={
 setError(newError);
 if(!newError.email&&!newError.password){
 
+
   Admin_login(login)
   .then((res)=>{
     console.log(res)
     if(res.data.success == true){
       console.log("login Successfull")
       localStorage.setItem("token",res.data.authtoken)
+
       navigate("/")
 
     }else if(res.data.success == false){
@@ -129,11 +133,13 @@ if(!newError.email&&!newError.password){
       setOpen(true);
     }
   
+
   })
   .catch((err)=>{
     console.log("Error:"+err)
   })
 }
+
 }
 
 const handleClose = (event, reason) => {
@@ -144,6 +150,7 @@ const handleClose = (event, reason) => {
   // Close the alert by setting the open state to false
   setOpen(false);
 };
+
 
 console.log(login)
   return (
@@ -206,8 +213,10 @@ console.log(login)
                 type="email"
                 
                 name="email"
+
                value={logvalidation.email}
                 error={error.email}
+
                 onChange={handleChange}
                 label="Email Address / Username"
                 inputProps={{}}
@@ -227,8 +236,10 @@ console.log(login)
                 type={showPassword ? 'text' : 'password'}
              
                 name="password"
+
                 value={logvalidation.password}
                 error={error.password}
+
                 onChange={handleChange}
                 endAdornment={
                   <InputAdornment position="end">
@@ -272,9 +283,11 @@ console.log(login)
 
             <Box sx={{ mt: 2 }}>
               <AnimateButton>
+
               <Stack spacing={2} sx={{ width: '100%' }}>
                 <Button  onClick={onSubmit} fullWidth size="large" type="submit" variant="contained" color="secondary">
                   Sign in 
+
                 </Button>
                  {/* Snackbar to show the alert */}
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
