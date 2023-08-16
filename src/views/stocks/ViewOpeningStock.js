@@ -61,7 +61,7 @@ export default function ViewOpeningStock() {
   const [display, setDisplay] = useState([]);
   const [display2, setDisplay2] = useState([]);
   const [count, setCount] = useState(0);
-  
+
   const [productId, setProductId] = useState('');
   const [stock, setStock] = useState({
     batch: '',
@@ -73,8 +73,6 @@ export default function ViewOpeningStock() {
     total: 0
   });
 
-
-
   const Change = (field, value) => {
     setStock((prevStock) => ({
       ...prevStock,
@@ -82,8 +80,6 @@ export default function ViewOpeningStock() {
       total: calculateRowTotal(field, value) // Recalculate the Total for the current row
     }));
   };
-
-
 
   const calculateRowTotal = (field, value) => {
     const { qty, price } = stock;
@@ -98,8 +94,6 @@ export default function ViewOpeningStock() {
     return total;
   };
 
-
-
   const handleAutocompleteChange = (value) => {
     alert(value);
     if (value) {
@@ -112,8 +106,6 @@ export default function ViewOpeningStock() {
     }
   };
 
-  
-
   const onSubmit = () => {
     UpdateOpeningStock1(productId, stock)
       .then((res) => {
@@ -124,8 +116,6 @@ export default function ViewOpeningStock() {
         console.log(err.message);
       });
   };
-
-
 
   useEffect(() => {
     // alert(count);
@@ -139,8 +129,6 @@ export default function ViewOpeningStock() {
       });
   }, [count]);
 
-
-
   useEffect(() => {
     View_Product()
       .then((res) => {
@@ -151,8 +139,6 @@ export default function ViewOpeningStock() {
         console.log('Error :' + err);
       });
   }, [count]);
-
-
 
   const filteredAndMappedItems = display
     .filter((item, index) => {
@@ -168,8 +154,6 @@ export default function ViewOpeningStock() {
       };
     });
   console.log('filteredAndMappedItems', filteredAndMappedItems);
-
-
 
   return (
     <div>
@@ -336,7 +320,7 @@ export default function ViewOpeningStock() {
               );
             })}
             <UpdateOpeningStock
-            setCount={setCount}
+              setCount={setCount}
               toggleShow={toggleShow}
               centredModal={centredModal}
               setCentredModal={setCentredModal}

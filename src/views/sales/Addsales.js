@@ -269,15 +269,7 @@ const TableComponent = () => {
             size="small"
             sx={{ width: 250, mb: 3 }}
           />
-          <TextField
-            variant="outlined"
-            label="Invoice No"
-            required
-            name="Invoice"
-            onChange={handleInputChange}
-            size="small"
-            sx={{ width: 250, mb: 3 }}
-          />
+         
           <FormControl sx={{ minWidth: 120 }}>
             <Autocomplete
               onChange={(e, value) => handleparty(value, 'Party', e.target.value)}

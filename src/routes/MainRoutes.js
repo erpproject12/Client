@@ -45,6 +45,7 @@ const Updatesales = Loadable(lazy(() => import('views/sales/Updatesales')));
 const ViewOpeningStock = Loadable(lazy(() => import('views/stocks/ViewOpeningStock')));
 
 const Reciept = Loadable(lazy(() => import('views/account/Reciept')));
+const ViewReciept = Loadable(lazy(() => import('views/account/ViewReciept')));
 
 
 // utilities routing
@@ -197,7 +198,12 @@ const MainRoutes = {
         {
           path: 'reciept',
           element: <Reciept />
+        },
+        {
+          path: 'view_reciept',
+          element: <ViewReciept />
         }
+        
         
         //   path: 'single-sales/:id',
         //   element: <Singlesales />

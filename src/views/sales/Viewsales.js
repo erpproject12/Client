@@ -119,7 +119,7 @@ export default function CustomizedTables() {
 
                   <StyledTableCell>{item.sales_billdate}</StyledTableCell>
                   <StyledTableCell sx={{ display: 'flex' }}>
-                    <Link to={`/msales/single-sales/${item._id}`}>
+                    <Link to={`/msales/view-all/${item._id}`}>
                       <IconButton>
                         <RemoveRedEyeIcon sx={{ color: 'green' }} />
                       </IconButton>

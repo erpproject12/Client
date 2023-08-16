@@ -116,6 +116,13 @@ export const Update_Sales = (id) => {
 }
 
 
+//Pay reciept
+export const Payment_Reciept_Insert=(val)=>{
+    return url.post('/api/payment_reciept_insert',val)
+}
+export const Payment_Reciept_View = () =>{
+    return url.get('/api/view_payment_reciept')
+}
 
 
 const url = Axios.create({
