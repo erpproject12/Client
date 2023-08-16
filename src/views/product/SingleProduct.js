@@ -58,6 +58,7 @@ const SamplePage = () => {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!'
+     
     }).then((result) => {
       if (result.isConfirmed) {
         DeleteProduct(id)
@@ -69,8 +70,11 @@ const SamplePage = () => {
             console.log(err);
           });
         Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+        
       }
+      
     });
+    
   };
 
   return (
@@ -151,12 +155,13 @@ const SamplePage = () => {
                       sx={{ color: 'red' }}
                       startIcon={
                         <DeleteIcon
-                          onClick={() => {
-                            handleDelete(product._id);
-                          }}
+                         
                           sx={{ color: 'red' }}
                         />
                       }
+                      onClick={() => {
+                        handleDelete(product._id);
+                      }}
                     >
                       Delete
                     </Button>

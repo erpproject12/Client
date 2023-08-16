@@ -43,6 +43,7 @@ const YourComponent = () => {
   };
   const [display, setDisplay] = useState([]);
   const [party, setParty] = useState([]);
+  
   const [formData, setFormData] = useState({
     BillNo: '',
     Party: '',
@@ -65,7 +66,7 @@ const YourComponent = () => {
       [field]: value
     });
 
-    setProductCode((prevProduct) => ({ ...prevProduct, [field]:value }));
+    setPurchaseCode((prevProduct) => ({ ...prevProduct, [field]:value }));
   setError((prevErrors) => ({ ...prevErrors, [field]:value === '' }));
 
   };
@@ -79,6 +80,10 @@ const YourComponent = () => {
       ...formData,
       rows: updatedRows
     });
+
+    setPurchaseCode((prevProduct) => ({ ...prevProduct, [field]:value }));
+  setError((prevErrors) => ({ ...prevErrors, [field]:value === '' }));
+
   };
 
   useEffect(() => {
@@ -177,19 +182,20 @@ const YourComponent = () => {
     let freight = 0;
     let grandTotal = 0;
     const subTotal = formData.rows.reduce((total, row) => total + row.Qty * row.PPrice, 0);
-    const discount = formData.rows.reduce((dis, row) => dis + row.Discount, 0);
-    const vat = formData.rows.reduce((vats, row) => vats + row.Tax, 0);
+    const discount = formData.rows.reduce((dis, row) => dis + (row.Qty * row.PPrice * row.Discount) / 100, 0);
+    const vat = formData.rows.reduce(
+      (vats, row) => vats + ((row.Qty * row.PPrice - (row.Qty * row.PPrice * row.Discount) / 100) * row.Tax) / 100,
+      0
+    );
 
     // Calculate Discount, Vat, and Freight (replace these calculations with your desired logic)
-    discounts = (subTotal * discount) / 100;
-    distotal = subTotal - discounts;
-    // 10% discount
-    Vats = (distotal * vat) / 100;
-    vattotal = Vats + distotal;
+    distotal = subTotal - discount;
+    Vats = distotal + vat;
     freight = formData.Freight;
-    grandTotal = vattotal + freight;
+    grandTotal = Vats + freight;
     // Calculate grand total
 
+    console.log(vat, 'vat');
     // Update the formData state with the calculated values
     setFormData({
       ...formData,
@@ -231,7 +237,7 @@ const YourComponent = () => {
       if (selectedItem) {
         console.log("mmmm");
         console.log(value);
-        alert(value);
+        // alert(value);
         
 
         const updatedRows = [...formData.rows];
@@ -301,7 +307,7 @@ const YourComponent = () => {
 
             options={party.map((item) => item.party_name)}
             sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Select Product" />}
+            renderInput={(params) => <TextField {...params} label="Select Party Name" />}
           />
                 
      
@@ -349,7 +355,7 @@ const YourComponent = () => {
                     options={display.map((item) => item.product_name)}
                     sx={{ width: 300 }}
                     onChange={(e,value) => handleAutocompleteChange(value, index)}
-                    renderInput={(params) => <TextField {...params} label="Select Product" />}
+                    renderInput={(params) => <TextField {...params} label="Select Product Name" />}
                   />
                 </TableCell>
                 <TableCell>

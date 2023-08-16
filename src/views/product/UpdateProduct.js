@@ -64,36 +64,53 @@ const SamplePage = () => {
   };
   return (
     <MainCard title="Add Product Details">
-      <FormControl>
+      
+      <Box  sx={{
+          
+          display: 'flex',gap:'10px',marginLeft: '50px'
+        }} >
+
         <Box
-          sx={{
-            '& .MuiTextField-root': { m: 1, width: '50ch' }
-          }}
+         
         >
           <TextField
+          sx={{width:'35ch'}}
             id="outlined-basic"
+            size="small"
             onChange={Change}
             value={product?.product_code}
             label="Product Code"
+            InputLabelProps={{
+              shrink:true
+            }}
             name="product_code"
             variant="outlined"
           />
+          </Box>
+          <Box>
           <TextField
+          sx={{width:'35ch'}}
             id="outlined-basic"
             onChange={Change}
             value={product?.product_name}
             label="Product Name"
             name="product_name"
+            size="small"
             variant="outlined"
+            InputLabelProps={{
+              shrink:true
+            }}
           />
         </Box>
-      </FormControl>
+     
 
 
-      <FormControl sx={{ m: 1, width: '50ch', mt: 3 }}>
+      <FormControl sx={{  width: '35ch'}}>
         <InputLabel id="demo-simple-select-label">Tax Percentage</InputLabel>
         <Select
+       
           variant="outlined"
+          size="small"
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           name="tax_code"
@@ -108,63 +125,110 @@ const SamplePage = () => {
         </Select>
       </FormControl>
 
-      <Box sx={{ m: 1 }}>
-        <FormControl fullWidth>
+
+</Box>
+      <Box sx={{ width: '108ch', mt: 3, marginBottom: '50px', marginTop: '5px' }}>
+        <FormControl fullWidth sx={{ marginLeft: '50px' }}>
           <TextField
+          size="small"
             id="outlined-multiline-static"
             onChange={Change}
             value={product.product_description}
             name="product_description"
             label="Product Description....."
             multiline
-            rows={4}
+            rows={1}
+            InputLabelProps={{
+              shrink:true
+            }}
           />
         </FormControl>
       </Box>
-      <Box>
-        <Typography sx={{ m: 1 }}>Optional</Typography>
+      <Box sx={{ marginLeft: '50px' }}>
+        <Typography sx={{ m: 1, fontWeight: 'bold', fontSize: '1.2rem' }}>Optional</Typography>
       </Box>
 
-      <FormControl>
+      <FormControl  sx={{ marginLeft: '50px' }}>
         <Box
           sx={{
-            '& .MuiTextField-root': { m: 1, width: '50ch' }
+            '& .MuiTextField-root': { m: 0.5, width: '35ch' }
           }}
         >
-          <TextField id="outlined-basic" onChange={Change} value={product.rack_no} label="Rack Number" name="rack_no" variant="outlined" />
-          <TextField id="outlined-basic" onChange={Change} value={product.HSN} label="HSN" name="HSN" variant="outlined" />
+          <TextField id="outlined-basic"
+          size="small"
+          InputLabelProps={{
+            shrink:true
+          }} onChange={Change} value={product.rack_no} label="Rack Number" name="rack_no" variant="outlined" />
+          <TextField 
+          id="outlined-basic"
+          size="small"
+          InputLabelProps={{
+            shrink:true
+          }} onChange={Change} value={product.HSN} label="HSN" name="HSN" variant="outlined" />
+           <TextField id="outlined-basic"
+          size="small"
+           InputLabelProps={{
+              shrink:true
+            }}
+            onChange={Change} value={product.category} label="Category" name="category" variant="outlined" />
         </Box>
       </FormControl>
-      <FormControl>
+      <FormControl sx={{ marginLeft: '50px' }}>
         <Box
-          sx={{
-            '& .MuiTextField-root': { m: 1, width: '50ch' }
-          }}
+            sx={{
+              '& .MuiTextField-root': { m: 0.5, width: '35ch' }
+            }}
         >
-          <TextField id="outlined-basic" onChange={Change} value={product.category} label="Category" name="category" variant="outlined" />
+         
           <TextField
             id="outlined-basic"
+            size="small"
             onChange={Change}
             value={product.manufactures}
             label="Manufacturer"
             name="manufactures"
             variant="outlined"
+            InputLabelProps={{
+              shrink:true
+            }}
           />
+<TextField
+            id="outlined-basic"
+            size="small"
+            onChange={Change}
+            value={product.weight_dimension}
+            InputLabelProps={{
+              shrink:true
+            }}
+            label="Weight Dimension"
+            name="weight_dimension"
+            variant="outlined"
+          />
+           <TextField id="outlined-basic" 
+          size="small"
+          InputLabelProps={{
+            shrink:true
+          }}
+          onChange={Change} value={product.variants} label="Variants" name="variants" variant="outlined" />
+          {/* <TextField id="outlined-basic" label="HSN" variant="outlined" /> */}
+
         </Box>
       </FormControl>
-      <FormControl>
+      <FormControl sx={{ marginLeft: '45px' }}>
         <Box
-          sx={{
-            '& .MuiTextField-root': { m: 1, width: '50ch' }
-          }}
+         sx={{ m: 0.5, width: '35ch', marginLeft:'280px', marginBottom: '50px' }}
         >
-          <FormControl sx={{ m: 1, width: '50ch' }}>
+          <FormControl sx={{ m: 1, width: '35ch' }}>
             <InputLabel id="demo-simple-select-label">Unit of Measure</InputLabel>
             <Select
               onChange={Change}
+              size="small"
               variant="outlined"
               labelId="demo-simple-select-label"
               id="demo-simple-select"
+              InputLabelProps={{
+                shrink:true
+              }}
               //   value={age}
               name="unit_of_masure"
               label="Tax Percentage"
@@ -176,27 +240,16 @@ const SamplePage = () => {
               <MenuItem value={30}>30%</MenuItem>
             </Select>
           </FormControl>
-          <TextField
-            id="outlined-basic"
-            onChange={Change}
-            value={product.weight_dimension}
-            label="Weight Dimension"
-            name="weight_dimension"
-            variant="outlined"
-          />
+          
         </Box>
       </FormControl>
-      <FormControl>
-        <Box
-          sx={{
-            '& .MuiTextField-root': { m: 1, width: '50ch' }
-          }}
-        >
-          <TextField id="outlined-basic" onChange={Change} value={product.variants} label="Variants" name="variants" variant="outlined" />
-          {/* <TextField id="outlined-basic" label="HSN" variant="outlined" /> */}
-        </Box>
-      </FormControl>
-      <Box>
+      
+      <Box
+       sx={{
+        '& .MuiTextField-root': { m: 2 },
+        '& .MuiButton-root': { fontSize: '1.0rem', padding: '8px 380px', marginLeft: '50px' }
+      }}
+      >
         <Button variant="contained" onClick={onSubmit} disableElevation fullWidth>
           Update Product
         </Button>

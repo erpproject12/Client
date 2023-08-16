@@ -188,6 +188,11 @@ const TableComponent = () => {
       ...formData,
       rows: updatedRows
     });
+
+    setSalescode((prevProduct) => ({ ...prevProduct, [field]:value }));
+    setError((prevErrors) => ({ ...prevErrors, [field]:value === '' }));
+
+
   };
 
   const calculateRowTotal = (row) => {
@@ -270,7 +275,7 @@ const TableComponent = () => {
 
       const selectedItem = display.find((item) => item.product_name === value);
       if (selectedItem) {
-        alert(selectedItem?._id);
+        // alert(selectedItem?._id);
 
         const updatedRows = [...formData.rows];
         // updatedRows[index]['Tax'] = value;

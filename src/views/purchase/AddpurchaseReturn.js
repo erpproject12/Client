@@ -148,6 +148,11 @@ if(!newError.BillNo&&!newError.Party&&!newError.BillDate&&!newError.Batch&&!newE
       ...formData,
       rows: updatedRows
     });
+
+    setPurchasereturncode((prevPurchase) => ({ ...prevPurchase, [field]:value }));
+    setError((prevErrors) => ({ ...prevErrors, [field]:value === '' }));
+  
+
   };
   useEffect(() => {
     View_Product()
@@ -303,7 +308,7 @@ if(!newError.BillNo&&!newError.Party&&!newError.BillDate&&!newError.Batch&&!newE
             
             options={party.map((item) => item.party_name)}
             sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Select Product" />}
+            renderInput={(params) => <TextField {...params} label="Select Party Name" />}
           />
            
         </FormControl>
@@ -352,7 +357,7 @@ if(!newError.BillNo&&!newError.Party&&!newError.BillDate&&!newError.Batch&&!newE
                     options={display.map((item) => item.product_name)}
                     sx={{ width: 300 }}
                     onChange={(e, value) => handleAutocompleteChange(value, index, 'ItemName', e.target.value)}
-                    renderInput={(params) => <TextField {...params} label="Select Product" />}
+                    renderInput={(params) => <TextField {...params} label="Select Product Name" />}
                   />
                    
                 </TableCell>
