@@ -9,6 +9,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  FormHelperText,
   TextField,
   Typography,
   Autocomplete
@@ -63,12 +64,34 @@ const YourComponent = () => {
 
 
   const [purchasereturncode, setPurchasereturncode]= useState({
-    bill_no:''
+    BillNo:'',
+    Party:'',
+    
+    BillDate:'',
+    Batch:'',
+    ExpDate:'',
+    Qty:'',
+    Discount:'',
+    PPrice:'',
+    SPrice: '',
+    MRP:'',
+    
 
   });
 
   const [error, setError] = useState({
-    bill_no:false
+    BillNo:false,
+    Party:false,
+    
+    BillDate:false,
+    Batch:false,
+    ExpDate:false,
+    Qty:false,
+    Discount:false,
+    PPrice:false,
+    SPrice: false,
+    MRP:false,
+    
   });
 
   const handleInputChange = (field, value) => {
@@ -77,8 +100,8 @@ const YourComponent = () => {
       [field]: value
     });
     
-    setPurchasereturncode((prevPurchase) => ({ ...prevPurchase, [e.target.name]:e.target.value }));
-  setError((prevErrors) => ({ ...prevErrors, [e.target.name]:e.target.value === '' }));
+    setPurchasereturncode((prevPurchase) => ({ ...prevPurchase, [field]:value }));
+  setError((prevErrors) => ({ ...prevErrors, [field]:value === '' }));
 
   };
 
@@ -87,11 +110,22 @@ const YourComponent = () => {
   const onSubmit = () => {
 
 const newError={
-  bill_no:purchasereturncode.bill_no === ''
+  BillNo:purchasereturncode.BillNo === '',
+  Party:purchasereturncode.Party === '',
+ 
+  BillDate:purchasereturncode.BillDate === '',
+  Batch:purchasereturncode.Batch === '',
+  ExpDate:purchasereturncode.ExpDate === '',
+  Qty:purchasereturncode.Qty === '',
+  Discount:purchasereturncode.Discount === '',
+  PPrice:purchasereturncode.PPrice === '',
+  SPrice:purchasereturncode.SPrice === '',
+  MRP:purchasereturncode.MRP === '',
+ 
 }
 
 setError(newError);
-if(!newError.bill_no){
+if(!newError.BillNo&&!newError.Party&&!newError.BillDate&&!newError.Batch&&!newError.ExpDate&&!newError.Qty&&!newError.Discount&&!newError.PPrice&&!newError.SPrice&&!newError.MRP){
     Insert_PurchaseReturn(formData)
 
       .then((res) => {
@@ -114,11 +148,16 @@ if(!newError.bill_no){
       ...formData,
       rows: updatedRows
     });
+
+    setPurchasereturncode((prevPurchase) => ({ ...prevPurchase, [field]:value }));
+    setError((prevErrors) => ({ ...prevErrors, [field]:value === '' }));
+  
+
   };
   useEffect(() => {
     View_Product()
       .then((res) => {
-        console.log('Product Response : ' + JSON.stringify(res.data));
+        console.log('Purchasw Return Response : ' + JSON.stringify(res.data));
         setDisplay(res.data);
       })
       .catch((err) => {
@@ -205,7 +244,7 @@ if(!newError.bill_no){
 
       const selectedItem = display.find((item) => item.product_name === value);
       if (selectedItem) {
-        alert(selectedItem?._id);
+        // alert(selectedItem?._id);
 
         const updatedRows = [...formData.rows];
         updatedRows[index]['Tax'] = value;
@@ -220,7 +259,9 @@ if(!newError.bill_no){
 
         // alert(selectedItem?.tax_code);
       }
+
     }
+    
   };
   const handleparty = (value) => {
     
@@ -245,14 +286,14 @@ if(!newError.bill_no){
         <TextField
           variant="outlined"
           label="Bill Number"
-          name="bill_no"
+          name="BillNo"
           size="small"
-          value={purchasereturncode.bill_no}
-          error={error.bill_no}
+          value={purchasereturncode.BillNo}
+          error={error.BillNo}
           onChange={(e) => handleInputChange('BillNo', e.target.value)}
           sx={{ width: 250, mb: 3 }}
         />
-              {error.bill_no && (
+              {error.BillNo && (
         <FormHelperText error>This field is required</FormHelperText>
       )}
 
@@ -262,15 +303,24 @@ if(!newError.bill_no){
             onChange={(e, value) => handleparty(value, 'Party', e.target.value)}
             disablePortal
             id="combo-box-demo"
-            name="party"
+            name="Party"
             size="small"
+            
             options={party.map((item) => item.party_name)}
             sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Select Product" />}
+            renderInput={(params) => <TextField {...params} label="Select Party Name" />}
           />
+           
         </FormControl>
 
-        <TextField type="date" size="small" onChange={(e) => handleInputChange('BillDate', e.target.value)} />
+        <TextField type="date" size="small"
+         value={purchasereturncode.BillDate}
+         error={error.BillDate}
+        onChange={(e) => handleInputChange('BillDate', e.target.value)} />
+
+         {error.BillDate && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
       </Stack>
 
       {/* Dynamic rows */}
@@ -301,13 +351,15 @@ if(!newError.bill_no){
                     key={index}
                     disablePortal
                     id="combo-box-demo"
-                    name="product"
+                    name="ItemName"
                     size="small"
+                    
                     options={display.map((item) => item.product_name)}
                     sx={{ width: 300 }}
                     onChange={(e, value) => handleAutocompleteChange(value, index, 'ItemName', e.target.value)}
-                    renderInput={(params) => <TextField {...params} label="Select Product" />}
+                    renderInput={(params) => <TextField {...params} label="Select Product Name" />}
                   />
+                   
                 </TableCell>
                 <TableCell>
                   <TextField
@@ -315,21 +367,30 @@ if(!newError.bill_no){
                     label="Batch"
                     name="batch"
                     size="small"
+                    value={purchasereturncode.Batch}
+                    error={error.Batch}
                     sx={{ borderRadius: 4, width: '10ch' }}
-                    value={row.col2}
+                    
                     onChange={(e) => handleRowChange(index, 'Batch', e.target.value)}
                   />
+                   {error.Batch && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
                 </TableCell>
                 <TableCell>
                   <TextField
                     variant="outlined"
                     type="date"
-                    name="expDate"
+                    name="ExpDate"
                     sx={{ borderRadius: 4, width: '15ch' }}
                     size="small"
-                    value={row.col3}
+                    value={purchasereturncode.ExpDate}
+                    error={error.ExpDate}
                     onChange={(e) => handleRowChange(index, 'ExpDate', e.target.value)}
                   />
+                    {error.ExpDate && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
                 </TableCell>
                 <TableCell>
                   <TextField
@@ -338,9 +399,13 @@ if(!newError.bill_no){
                     sx={{ borderRadius: 4, width: '10ch' }}
                     size="small"
                     name="Qty"
-                    value={row.Qty}
+                    value={purchasereturncode.Qty}
+                    error={error.Qty}
                     onChange={(e) => handleRowChange(index, 'Qty', parseInt(e.target.value))}
                   />
+                   {error.Qty && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
                 </TableCell>
 
                 <TableCell>
@@ -350,20 +415,29 @@ if(!newError.bill_no){
                     name="Discount"
                     sx={{ borderRadius: 4, width: '10ch' }}
                     size="small"
-                    value={row.Discount}
+                    value={purchasereturncode.Discount}
+                    error={error.Discount}
                     onChange={(e) => handleRowChange(index, 'Discount', parseInt(e.target.value))}
                   />
+                    {error.Discount && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
                 </TableCell>
                 <TableCell>
                   <TextField
                     variant="outlined"
                     label="PPrice"
                     name="PPrice"
+                    value={purchasereturncode.PPrice}
+                    error={error.PPrice}
                     size="small"
                     sx={{ borderRadius: 4, width: '10ch' }}
-                    value={row.PPrice}
+                    
                     onChange={(e) => handleRowChange(index, 'PPrice', parseInt(e.target.value))}
                   />
+                   {error.PPrice && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
                 </TableCell>
                 <TableCell>
                   <TextField
@@ -372,9 +446,13 @@ if(!newError.bill_no){
                     name="SPrice"
                     size="small"
                     sx={{ borderRadius: 4, width: '10ch' }}
-                    value={row.col9}
+                    value={purchasereturncode.SPrice}
+                    error={error.SPrice}
                     onChange={(e) => handleRowChange(index, 'SPrice', parseInt(e.target.value))}
                   />
+                   {error.SPrice && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
                 </TableCell>
                 <TableCell>
                   <TextField
@@ -382,10 +460,15 @@ if(!newError.bill_no){
                     label="MRP"
                     name="MRP"
                     size="small"
+                    value={purchasereturncode.MRP}
+                    error={error.MRP}
                     sx={{ borderRadius: 4, width: '10ch' }}
-                    value={row.col10}
+                   
                     onChange={(e) => handleRowChange(index, 'MRP', parseInt(e.target.value))}
                   />
+                   {error.MRP && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
                 </TableCell>
                 <TableCell>
                   <TextField
@@ -397,6 +480,7 @@ if(!newError.bill_no){
                     value={row?.Tax}
                     onChange={(e) => handleRowChange(index, 'Tax', parseInt(e.target.value))}
                   />
+                   
                 </TableCell>
                 <TableCell>
                   <TextField
@@ -404,6 +488,7 @@ if(!newError.bill_no){
                     label="Total"
                     size="small"
                     name="Total"
+
                     sx={{ borderRadius: 0, width: '10ch' }}
                     value={calculateRowTotal(row)}
                   />

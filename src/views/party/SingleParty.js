@@ -178,7 +178,8 @@ return(
                   </MDBCol>
                   <MDBCol sm="9">
 
-                  <Button variant="outlined" sx={{color:'red'}}  startIcon={<DeleteIcon onClick={() => handleDelete(party._id)} sx={{color:'red'}} />}>
+                  <Button variant="outlined" sx={{color:'red'}}  startIcon={<DeleteIcon  sx={{color:'red'}} />}
+                  onClick={() => handleDelete(party._id)}>
         Delete
       </Button>
 

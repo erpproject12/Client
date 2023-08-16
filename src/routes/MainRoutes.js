@@ -20,6 +20,8 @@ const SingleParty = Loadable(lazy(() => import('views/party/SingleParty')));
 
 const Addpurchase = Loadable(lazy(() => import('views/purchase/Addpurchase')));
 const Viewpurchase = Loadable(lazy(() => import('views/purchase/Viewpurchase')));
+const ViewpurchaseAll = Loadable(lazy(() => import('views/purchase/Viewpurchaseall')));
+
 const AddpurchaseReturn = Loadable(lazy(() => import('views/purchase/AddpurchaseReturn')));
 const ViewpurchaseReturn = Loadable(lazy(() => import('views/purchase/ViewpurchaseReturn')));
 
@@ -131,6 +133,10 @@ const MainRoutes = {
           element: <Viewpurchase />
         },
         {
+          path: 'view-purchaseall/:id',
+          element: <ViewpurchaseAll />
+        },
+        {
           path: 'add-purchase-return',
           element: <AddpurchaseReturn />
         },
@@ -138,6 +144,7 @@ const MainRoutes = {
           path: 'view-purchase-return',
           element: <ViewpurchaseReturn />
         },
+
         {
           path: 'viewall-purchasereturn/:id',
           element: <ViewAllpurchaseReturn />
@@ -160,6 +167,11 @@ const MainRoutes = {
           path: 'view-sales',
           element: <Viewsales />
         },
+        {
+          path: 'single-sales/:id',
+          element: <Singlesales />
+        },
+
         {
           path: 'add-sales-return',
           element: <AddsalesReturn />

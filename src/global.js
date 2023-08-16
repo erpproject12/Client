@@ -46,6 +46,18 @@ export const Insert_Purchase = (val) =>{
     return url.post('/api/purchase_insert',val)
 }
 
+export const View_Purchase = () =>{
+    return url.get('/api/view_purchase')
+}
+
+export const View_All_Purchase = (id) =>{
+    return url.get(`/api/view_purchase/${id}`)
+}
+
+export const Delete_Purchase = (id) =>{
+    return url.delete(`/api/delete_purchase/${id}`)
+}
+
 
 
 
@@ -121,6 +133,7 @@ export const Admin_Insert = (val)=>{
 }
 
 
+
 //Pay reciept
 export const Payment_Reciept_Insert=(val)=>{
     return url.post('/api/payment_reciept_insert',val)
@@ -133,6 +146,7 @@ export const Payment_Reciept_View = () =>{
 export const Admin_login = (val)=>{
     return url.post('/api/admin_login',val)
 }
+
 
 
 const url = Axios.create({

@@ -3,7 +3,7 @@
 // project imports
 import React,{useState} from 'react'
 import MainCard from 'ui-component/cards/MainCard';
-
+import { useNavigate } from 'react-router';
 import {Insert_Party} from '../../global'
 import {
   Box,
@@ -34,6 +34,7 @@ import {
 
 
 const SamplePage = () =>{
+  let nav = useNavigate();
   const [party,setParty]=useState({})
 
           
@@ -137,7 +138,8 @@ const SamplePage = () =>{
 
       Insert_Party(party)
       .then((res)=>{
-        console.log(res)
+        console.log(res);
+        nav('../../mparty/view-party');
       })
   .catch((error)=>{
   console.log("Error :"+ error)
@@ -149,44 +151,59 @@ console.log(party)
 return(
 
   <MainCard title="Add Party Details">
-    <FormControl>
+   <Box sx={{display:'flex',gap:'10px',marginBottom:'10px',marginLeft:'100px'}} >
+    
       <Box
-        sx={{
-          '& .MuiTextField-root': { m: 1, width: '50ch' }
-        }}
-      >
-        <TextField id="outlined-basic"
+              >
+        <TextField 
+        sx={{width:'35ch'}}
           value={partycode.party_name}
           error={error.party_name}
-        
+          size="small"
+          
         onChange={Change} label="Party Name" required name='party_name' variant="outlined" />  
         {error.party_name && (
         <FormHelperText error>Enter characters only </FormHelperText>
-      )}    
-    
-        <TextField id="outlined-basic" 
+      )}   
+
+      </Box>
+      
+
+      
+      <Box>
+        <TextField 
+        sx={{width:'35ch'}}
          value={partycode.party_phone}
          error={error.party_phone}
+         size="small"
         onChange={Change}  label="Party Contect Number" required name='party_phone' variant="outlined" />
          {error.party_phone && (
         <FormHelperText error>Enter exactly 10 digits</FormHelperText>
       )}    
       </Box>
-    </FormControl>
-    <FormControl>
-      <Box
-        sx={{
-          '& .MuiTextField-root': { m: 1, width: '50ch' }
-        }}
-      >
-        <TextField id="outlined-basic"
+
+
+      <Box>
+      <TextField 
+      sx={{width:'35ch'}}
         value={partycode.party_email}
         error={error.party_email}
+        size="small"
         onChange={Change} label="Party Email" name='party_email' variant="outlined" />
          {error.party_email && (
         <FormHelperText error>Enter valid email</FormHelperText>
       )}  
-        <TextField id="outlined-basic" 
+
+</Box>   
+</Box>
+
+
+      
+      <Box sx={{display:'flex',gap:'10px',marginBottom:'10px',marginLeft:'100px'}}>   
+<Box >
+        <TextField 
+        sx={{width:'35ch'}}
+        size="small"
          value={partycode.party_address}
          error={error.party_address} 
         onChange={Change}  required label="Party address" name='party_address' variant="outlined" />
@@ -194,21 +211,24 @@ return(
         <FormHelperText error>This field is required</FormHelperText>
       )}  
       </Box>
-    </FormControl>
-    <FormControl>
+    
       <Box
-        sx={{
-          '& .MuiTextField-root': { m: 1, width: '50ch' }
-        }}
+        
       >
-        <TextField id="outlined-basic" 
+        <TextField 
+        sx={{width:'35ch'}}
+        size="small"
         value={partycode.party_street}
         error={error.party_street}
         onChange={Change} label="Party Street" name='party_street' variant="outlined" />
          {error.party_street && (
         <FormHelperText error>This field is required</FormHelperText>
-      )}  
-        <TextField id="outlined-basic" 
+      )} 
+      </Box> 
+      <Box>
+        <TextField
+        sx={{width:'35ch'}} 
+        size="small"
          value={partycode.party_city}
          error={error.party_city}
         onChange={Change} label="Party City" name='party_city' variant="outlined" />
@@ -216,21 +236,30 @@ return(
         <FormHelperText error>This field is required</FormHelperText>
       )}  
       </Box>
-    </FormControl>
-    <FormControl>
+   </Box>
+
+
+
+<Box sx={{display:'flex',gap:'10px',marginBottom:'10px',marginLeft:'100px'}}>
+    
       <Box
-        sx={{
-          '& .MuiTextField-root': { m: 1, width: '50ch' }
-        }}
+       
       >
-         <TextField id="outlined-basic"
+         <TextField 
+         sx={{width:'35ch'}}
+         size="small"
           value={partycode.party_pincode}
           error={error.party_pincode}
          onChange={Change} label="Party Pincode" name='party_pincode' variant="outlined" />
            {error.party_pincode && (
         <FormHelperText error>Enter digits only</FormHelperText>
       )}  
-        <TextField id="outlined-basic"
+      </Box>
+
+      <Box>
+        <TextField 
+        sx={{width:'35ch'}}
+        size="small"
          value={partycode.party_state}
          error={error.party_state}
         onChange={Change}  label="Party State" name='party_state' variant="outlined" />
@@ -238,19 +267,12 @@ return(
         <FormHelperText error>This field is required</FormHelperText>
       )}  
       </Box>
-    </FormControl>
     
-  
-
-    <FormControl>
-      <Box
-        sx={{
-          '& .MuiTextField-root': { m: 1, width: '50ch' }
-        }}
-      >
-           
+      <Box>
       
-        <TextField id="outlined-basic"
+        <TextField
+        sx={{width:'35ch'}}
+        size="small"
          value={partycode.party_country}
          error={error.party_country}
         onChange={Change}  label="Party Country" name='party_country' variant="outlined" />
@@ -258,15 +280,67 @@ return(
         <FormHelperText error>This field is required</FormHelperText>
       )}  
       </Box>
-    </FormControl>
-    <FormControl >
+
+      </Box>
+
+    
+    
+   <Box sx={{display:'flex',gap:'10px',marginBottom:'10px',marginLeft:'100px'}}>
+    
+     
       <Box
-       sx={{
-        '& .MuiSelect-root': { m: 1, width: '50ch' }
-      }}
+      >
+      
+        <TextField
+        sx={{width:'35ch'}} 
+        size="small"
+        value={partycode.party_GST}
+        error={error.party_GST}
+        onChange={Change}  label="GST Number" name='party_GST' variant="outlined" />
+        {error.party_GST && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}  
+      </Box>
+    
+      <Box
+      >
+
+        <TextField 
+        sx={{width:'35ch'}}
+        size="small"
+value={partycode.party_creadit_limit}
+error={error.party_creadit_limit}
+        onChange={Change}  label="Credit Limit" name='party_creadit_limit' variant="outlined" />
+       {error.party_creadit_limit && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}  
+      </Box>
+
+      <Box
+       
+      >
+        <TextField 
+        sx={{width:'35ch'}}
+        size="small" 
+        value={partycode.party_creadit_days}
+        error={error.party_creadit_days}
+        onChange={Change}  label="Credit Days" name='party_creadit_days' variant="outlined" />
+        {/* <TextField id="outlined-basic" onChange={Change}  label="Manufacturer" name='manufactures' variant="outlined" /> */}
+        {error.party_creadit_days && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}  
+      </Box>
+
+      </Box>
+   
+   
+    
+    <Box sx={{marginBottom:'30px',marginLeft:'380px'}}
       >
            <InputLabel id="demo-simple-select-label">Account Type</InputLabel>
           <Select
+          
+          size="small"
  value={partycode.party_account_type}
  error={error.party_account_type}
 
@@ -275,7 +349,7 @@ return(
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             //   value={age}
-            sx={{ m: 1, width: '50ch' }}
+            sx={{ m: 1, width: '35ch' }}
             name='party_account_type'
             label="Tax Percentage"
           >
@@ -288,68 +362,15 @@ return(
         <FormHelperText error>This field is required</FormHelperText>
       )}  
       </Box>
-    </FormControl>
-    <FormControl>
-      <Box
-        sx={{
-          '& .MuiTextField-root': { m: 1, width: '50ch' }
-        }}
-      >
-      
-        <TextField id="outlined-basic"
-        value={partycode.party_GST}
-        error={error.party_GST}
-        onChange={Change}  label="GST Number" name='party_GST' variant="outlined" />
-        {error.party_GST && (
-        <FormHelperText error>This field is required</FormHelperText>
-      )}  
-      </Box>
-    </FormControl>
-
-    
     
 
-    
-
-    <FormControl>
-      <Box
-        sx={{
-          '& .MuiTextField-root': { m: 1, width: '50ch' }
-        }}
-      >
-
-
-
-
-        <TextField id="outlined-basic" 
-value={partycode.party_creadit_limit}
-error={error.party_creadit_limit}
-        onChange={Change}  label="Credit Limit" name='party_creadit_limit' variant="outlined" />
-       {error.party_creadit_limit && (
-        <FormHelperText error>This field is required</FormHelperText>
-      )}  
-      </Box>
-    </FormControl>
-    <FormControl>
-      <Box
-        sx={{
-          '& .MuiTextField-root': { m: 1, width: '50ch' }
-        }}
-      >
-        <TextField id="outlined-basic" 
-        value={partycode.party_creadit_days}
-        error={error.party_creadit_days}
-        onChange={Change}  label="Credit Days" name='party_creadit_days' variant="outlined" />
-        {/* <TextField id="outlined-basic" onChange={Change}  label="Manufacturer" name='manufactures' variant="outlined" /> */}
-        {error.party_creadit_days && (
-        <FormHelperText error>This field is required</FormHelperText>
-      )}  
-      </Box>
-    </FormControl>
-   
-    
-<Box>
-    <Button variant="contained"  onClick={onSubmit} disableElevation fullWidth>
+<Box
+ sx={{
+  '& .MuiTextField-root': { m: 2 },
+  '& .MuiButton-root': { fontSize: '1.0rem', padding: '8px 380px', marginLeft: '100px' }
+}}
+>
+    <Button variant="contained"  onClick={onSubmit} disableElevation >
   Add Party
 </Button>
 </Box>

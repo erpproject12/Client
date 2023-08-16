@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,forwardRef } from 'react';
 import { useSelector } from 'react-redux';
 import {Admin_login} from '../../../../global';
 // material-ui
@@ -12,6 +12,8 @@ import {
   FormControlLabel,
   FormHelperText,
   Grid,
+  
+  Snackbar,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -20,7 +22,8 @@ import {
   Typography,
   useMediaQuery
 } from '@mui/material';
-
+import { useNavigate } from 'react-router-dom';
+import MuiAlert from '@mui/material/Alert';
 // third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -35,14 +38,24 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import Google from 'assets/images/icons/social-google.svg';
 
+const Alert = forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const FirebaseLogin = ({ ...others }) => {
+  const navigate = useNavigate();
+
   const theme = useTheme();
   const scriptedRef = useScriptRef();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const customization = useSelector((state) => state.customization);
   const [checked, setChecked] = useState(true);
+
+
+  const [open, setOpen] = useState(false);
+
 const [login,setLogin] = useState({})
   const googleHandler = async () => {
     console.error('Login');
@@ -57,50 +70,93 @@ const [login,setLogin] = useState({})
     event.preventDefault();
   };
 const handleChange = (e) =>{
-  setLogin({...login,[e.target.name]:e.target.value})
+
+  setLogin({...login,[e.target.name]:e.target.value});
+
+  const emailRegex = /^[A-Za-z0-9._%+-]+@gmail\.com$/i;
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    const isValidInput = emailRegex.test(e.target.value);
+    const isValidInputpass = passwordRegex.test(e.target.value);
+
+
+    setLogvalidation((prevProduct) => ({ ...prevProduct, [e.target.name]: e.target.value }));
+    
+    if(e.target.name==='email'){
+      setError((prevErrors) => ({ ...prevErrors, email :!isValidInput }));
+    } else if(e.target.name === 'password'){
+      setError((prevErrors) => ({ ...prevErrors, password :!isValidInputpass }));
+    } else{
+    setError((prevErrors) => ({ ...prevErrors, [e.target.name]: e.target.value === '' }));
+  }
+
 }
+
+const [logvalidation,setLogvalidation]=useState({
+email:'',
+password:''
+});
+
+const [error, setError] = useState({
+email:false,
+password:false
+});
+
 const onSubmit=(e)=>{
   e.preventDefault();
+
+const newError ={
+  email:logvalidation.email === '',
+  password:logvalidation.password === ''
+}
+
+setError(newError);
+if(!newError.email&&!newError.password){
+
+
   Admin_login(login)
   .then((res)=>{
     console.log(res)
     if(res.data.success == true){
       console.log("login Successfull")
       localStorage.setItem("token",res.data.authtoken)
-      
+
+      navigate("/")
+
+    }else if(res.data.success == false){
+     
+      setOpen(true);
+
     }else{
       console.log("some error occured")
+      setOpen(true);
     }
+  
+
   })
   .catch((err)=>{
     console.log("Error:"+err)
   })
 }
+
+}
+
+const handleClose = (event, reason) => {
+  if (reason === 'clickaway') {
+    return;
+  }
+
+  // Close the alert by setting the open state to false
+  setOpen(false);
+};
+
+
 console.log(login)
   return (
     <>
       <Grid container direction="column" justifyContent="center" spacing={2}>
-        <Grid item xs={12}>
-          <AnimateButton>
-            <Button
-              disableElevation
-              fullWidth
-              onClick={googleHandler}
-              size="large"
-              variant="outlined"
-              sx={{
-                color: 'grey.700',
-                backgroundColor: theme.palette.grey[50],
-                borderColor: theme.palette.grey[100]
-              }}
-            >
-              <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}>
-                <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} />
-              </Box>
-              Sign in with Google
-            </Button>
-          </AnimateButton>
-        </Grid>
+        
         <Grid item xs={12}>
           <Box
             sx={{
@@ -110,23 +166,7 @@ console.log(login)
           >
             <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
 
-            <Button
-              variant="outlined"
-              sx={{
-                cursor: 'unset',
-                m: 2,
-                py: 0.5,
-                px: 7,
-                borderColor: `${theme.palette.grey[100]} !important`,
-                color: `${theme.palette.grey[900]}!important`,
-                fontWeight: 500,
-                borderRadius: `${customization.borderRadius}px`
-              }}
-              disableRipple
-              disabled
-            >
-              OR
-            </Button>
+           
 
             <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
           </Box>
@@ -167,13 +207,16 @@ console.log(login)
         {({ errors,  touched, values }) => (
           <form noValidate  {...others}>
             <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-              <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
+              <InputLabel htmlFor="outlined-adornment-email-login">Email Address </InputLabel>
               <OutlinedInput
                 id="outlined-adornment-email-login"
                 type="email"
                 
                 name="email"
-              
+
+               value={logvalidation.email}
+                error={error.email}
+
                 onChange={handleChange}
                 label="Email Address / Username"
                 inputProps={{}}
@@ -183,6 +226,7 @@ console.log(login)
                   {errors.email}
                 </FormHelperText>
               )}
+               {error.email && <FormHelperText error>Enter valid email</FormHelperText>}
             </FormControl>
 
             <FormControl fullWidth error={Boolean(touched.password && errors.password)} sx={{ ...theme.typography.customInput }}>
@@ -192,7 +236,10 @@ console.log(login)
                 type={showPassword ? 'text' : 'password'}
              
                 name="password"
-          
+
+                value={logvalidation.password}
+                error={error.password}
+
                 onChange={handleChange}
                 endAdornment={
                   <InputAdornment position="end">
@@ -215,6 +262,7 @@ console.log(login)
                   {errors.password}
                 </FormHelperText>
               )}
+               {error.password && <FormHelperText error>This field is required</FormHelperText>}
             </FormControl>
             <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
               <FormControlLabel
@@ -235,9 +283,19 @@ console.log(login)
 
             <Box sx={{ mt: 2 }}>
               <AnimateButton>
+
+              <Stack spacing={2} sx={{ width: '100%' }}>
                 <Button  onClick={onSubmit} fullWidth size="large" type="submit" variant="contained" color="secondary">
-                  Sign in
+                  Sign in 
+
                 </Button>
+                 {/* Snackbar to show the alert */}
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+  <Alert severity="warning" sx={{ width: '450px' }}>
+    Email or password is wrong!
+  </Alert>
+</Snackbar>
+          </Stack>
               </AnimateButton>
             </Box>
           </form>

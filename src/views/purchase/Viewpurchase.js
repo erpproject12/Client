@@ -9,16 +9,16 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { View_Product,DeleteProduct } from '../../global';
+import {View_Purchase } from '../../global';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { useNavigate } from 'react-router-dom';
 import {Link} from 'react-router-dom'
 import { Box, color } from '@mui/system';
 import { Button } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -43,13 +43,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 export default function CustomizedTables() {
-
-const [display,setDisplay]=useState([]);
+  const [display,setDisplay]=useState([]);
+  let nav = useNavigate();
 
   useEffect(()=>{
-    View_Product()
+    View_Purchase()
     .then((res)=>{
-      console.log("Product Response : " + JSON.stringify(res.data));
+      console.log("Purchase Response : " + JSON.stringify(res.data));
       setDisplay(res.data)
     })
     .catch((err)=>{
@@ -58,40 +58,14 @@ const [display,setDisplay]=useState([]);
   },[])
 
   
-  const handleDelete=(id)=>{
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        DeleteProduct(id)
-       
-        .then((res)=>{
-          console.log(res);
-          nav('/mpurchase/view-purchase-return')
-        })
-        .catch((err)=>{
-          console.log(err)
-        })
-        Swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        )
-      }
-    })
-   
-  }
+
+
+ 
   return (
     <div>
     <Box sx={{display:'flex',justifyContent:'end',mb:'10px'}}>
     <Button variant="contained" startIcon={<AddIcon />}>
-   <Link to={'/mpurchase/add-purchase'} style={{textDecoration:'none',color:'white'}}>Add Product</Link>
+   <Link to={'/mpurchase/add-purchase'} style={{textDecoration:'none',color:'white'}}>Add Purchase</Link>
 </Button>
      
     </Box>
@@ -100,12 +74,14 @@ const [display,setDisplay]=useState([]);
         <TableHead>
           <TableRow>
             <StyledTableCell>#</StyledTableCell>
-            <StyledTableCell>Product Code</StyledTableCell>
-            <StyledTableCell>Product Name</StyledTableCell>
-            <StyledTableCell>Tax(%)</StyledTableCell>
-            <StyledTableCell>Description</StyledTableCell>
-            <StyledTableCell>Active Status</StyledTableCell>
-            <StyledTableCell>Date</StyledTableCell>
+            <StyledTableCell>Party Name</StyledTableCell>
+            <StyledTableCell>Bill Number</StyledTableCell>
+            <StyledTableCell>Sub-Total</StyledTableCell>
+            <StyledTableCell>Discount</StyledTableCell>
+            <StyledTableCell>VAT</StyledTableCell>
+            <StyledTableCell>Freight</StyledTableCell>
+            <StyledTableCell>Grand Total</StyledTableCell>
+            <StyledTableCell>Bill Date</StyledTableCell>
             <StyledTableCell>Action</StyledTableCell>
           </TableRow>
         </TableHead>
@@ -114,16 +90,20 @@ const [display,setDisplay]=useState([]);
             return(
               <StyledTableRow key={index} >
               <StyledTableCell component="th" scope="row">
-                {index+1}
+                {++index}
               </StyledTableCell>
-              <StyledTableCell >{item.product_code}</StyledTableCell>
-              <StyledTableCell >{item.product_name}</StyledTableCell>
-              <StyledTableCell >{item.tax_code}</StyledTableCell>
-              <StyledTableCell >{item.product_description}</StyledTableCell>
-              <StyledTableCell >{item.active_status}</StyledTableCell>
-              <StyledTableCell >{item.date}</StyledTableCell>
+              <StyledTableCell >{item.party_id.party_name}</StyledTableCell>
+              <StyledTableCell >{item.purchase_bill_no}</StyledTableCell>
+              <StyledTableCell >₹{item.purchase_total_price}</StyledTableCell>
+              <StyledTableCell >{item.purchase_discount}</StyledTableCell>
+              <StyledTableCell >{item.purchase_vat}</StyledTableCell>
+              <StyledTableCell >{item.purchase_freight}</StyledTableCell>
+              <StyledTableCell >₹{item.purchase_gtotal}</StyledTableCell>
+              <StyledTableCell >{item.purchase_udate}</StyledTableCell>
               <StyledTableCell sx={{display:'flex'}}>
-              <Link to={`/mproduct/single-product/${item._id}`} ><IconButton><RemoveRedEyeIcon sx={{color:'green'}}/></IconButton></Link>
+              <Link to={`/mpurchase/view-purchaseall/${item._id}`} ><RemoveRedEyeIcon sx={{color:'green'}}/></Link>
+               
+                 
                   </StyledTableCell>
             </StyledTableRow>
             )

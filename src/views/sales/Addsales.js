@@ -12,7 +12,8 @@ import {
   Paper,
   TextField,
   Typography,
-  Autocomplete
+  Autocomplete,
+  FormHelperText
 } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -36,7 +37,7 @@ const TableComponent = () => {
     Qty: 0,
     Discount: 0,
     PPrice: 0,
-    SPrice: '',
+   
     MRP: '',
     Tax: 0,
     Total: 0
@@ -82,6 +83,10 @@ const TableComponent = () => {
       [e.target.name]: e.target.value
 
     });
+
+    setSalescode((prevProduct) => ({ ...prevProduct, [e.target.name]:e.target.value }));
+    setError((prevErrors) => ({ ...prevErrors, [e.target.name]:e.target.value === '' }));
+
   };
 
   //   <TextField name="BillNo" onChange={handleInputChange} size="small"  /> //name should be state value
@@ -114,7 +119,49 @@ const TableComponent = () => {
       });
   }, []);
 
+
+  const [salescode, setSalescode] =useState({
+    BillNo:'',
+    Invoice:'',
+    BillDate:'',
+    Batch:'',
+    ExpDate:'',
+    Qty:'',
+    Discount:'',
+    PPrice:'',
+    MRP:''
+  });
+
+  const [error, setError] = useState({
+
+    BillNo:false,
+    Invoice:false,
+    BillDate:false,
+    Batch:false,
+    ExpDate:false,
+    Qty:false,
+    Discount:false,
+    PPrice:false,
+    MRP:false
+
+  })
+
   const onSubmit = () => {
+
+    const newError={
+      BillNo:salescode.BillNo === '',
+      Invoice:salescode.Invoice === '',
+      BillDate:salescode.BillDate === '',
+      Batch:salescode.Batch === '',
+      ExpDate:salescode.ExpDate === '',
+      Qty:salescode.Qty === '',
+      PPrice:salescode.PPrice === '',
+      MRP:salescode.MRP === '',
+      Discount:salescode.Discount === ''
+    }
+
+    setError(newError);
+    if(newError.BillNo&&!newError.Invoice&&!newError.BillDate&&!newError.Batch&&newError.ExpDate&&!newError.Qty&&!newError.PPrice&&!newError.MRP&&!newError.Discount){
 
     Insert_Sales(formData)
       .then((res) => {
@@ -123,6 +170,7 @@ const TableComponent = () => {
       .catch((error) => {
         console.log(error);
       });
+    }
   };
 
   // .......................start.............................................................//
@@ -140,6 +188,11 @@ const TableComponent = () => {
       ...formData,
       rows: updatedRows
     });
+
+    setSalescode((prevProduct) => ({ ...prevProduct, [field]:value }));
+    setError((prevErrors) => ({ ...prevErrors, [field]:value === '' }));
+
+
   };
 
   const calculateRowTotal = (row) => {
@@ -222,7 +275,7 @@ const TableComponent = () => {
 
       const selectedItem = display.find((item) => item.product_name === value);
       if (selectedItem) {
-        alert(selectedItem?._id);
+        // alert(selectedItem?._id);
 
         const updatedRows = [...formData.rows];
         // updatedRows[index]['Tax'] = value;
@@ -265,11 +318,31 @@ const TableComponent = () => {
             label="Bill Number"
             required
             name="BillNo"
+            value={salescode.BillNo}
+            error={error.BillNo}
             onChange={handleInputChange}
             size="small"
             sx={{ width: 250, mb: 3 }}
           />
-         
+
+           {error.BillNo && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
+          <TextField
+            variant="outlined"
+            label="Invoice No"
+            required
+            name="Invoice"
+            value={salescode.Invoice}
+            error={error.Invoice}
+            onChange={handleInputChange}
+            size="small"
+            sx={{ width: 250, mb: 3 }}
+          />
+           {error.Invoice && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
+
           <FormControl sx={{ minWidth: 120 }}>
             <Autocomplete
               onChange={(e, value) => handleparty(value, 'Party', e.target.value)}
@@ -283,7 +356,13 @@ const TableComponent = () => {
             />
           </FormControl>
 
-          <TextField type="date" size="small" name="BillDate" required onChange={handleInputChange} />
+          <TextField type="date" size="small" name="BillDate"
+          value={salescode.BillDate}
+          error={error.BillDate}
+          required onChange={handleInputChange} />
+           {error.BillDate && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
         </Stack>
         <TableContainer component={Paper}>
           <Table>
@@ -322,9 +401,14 @@ const TableComponent = () => {
                       variant="outlined"
                       label="Batch"
                       size="small"
+                      value={salescode.Batch}
+                      error={error.Batch}
                       sx={{ borderRadius: 4, width: '10ch' }}
                       onChange={(e) => handleRowChange(index, 'Batch', e.target.value)}
                     />
+                     {error.Batch && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
                   </TableCell>
                   <TableCell>
                     <TextField
@@ -333,9 +417,13 @@ const TableComponent = () => {
                       name="expDate"
                       sx={{ borderRadius: 4, width: '15ch' }}
                       size="small"
-                      value={row.col3}
+                      value={salescode.ExpDate}
+                      error={error.ExpDate}
                       onChange={(e) => handleRowChange(index, 'ExpDate', e.target.value)}
                     />
+                    {error.ExpDate && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
                   </TableCell>
                   <TableCell>
                     <TextField
@@ -345,9 +433,13 @@ const TableComponent = () => {
                       size="small"
                       name="Qty"
                       required
-                      value={row.Qty}
+                      value={salescode.Qty}
+                      error={error.Qty}
                       onChange={(e) => handleRowChange(index, 'Qty', parseInt(e.target.value))}
                     />
+                     {error.Qty && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
                   </TableCell>
 
                   <TableCell>
@@ -356,9 +448,13 @@ const TableComponent = () => {
                       label="Discount"
                       sx={{ borderRadius: 4, width: '10ch' }}
                       size="small"
-                      value={row.Discount}
+                      value={salescode.Discount}
+                      error={error.Discount}
                       onChange={(e) => handleRowChange(index, 'Discount', parseInt(e.target.value))}
                     />
+                      {error.Discount && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
                   </TableCell>
 
                   <TableCell>
@@ -367,21 +463,30 @@ const TableComponent = () => {
                       label="Price"
                       required
                       size="small"
+                      value={salescode.PPrice}
+                      error={error.PPrice}
                       sx={{ borderRadius: 4, width: '10ch' }}
-                      value={row.PPrice}
+                     
                       onChange={(e) => handleRowChange(index, 'PPrice', parseInt(e.target.value))}
                     />
+                      {error.PPrice && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
                   </TableCell>
                   <TableCell>
                     <TextField
                       variant="outlined"
                       label="MRP"
                       size="small"
-                      value={row.MRP}
+                      value={salescode.MRP}
+                      error={error.MRP}
                       sx={{ borderRadius: 4, width: '10ch' }}
                       onChange={(e) => handleRowChange(index, 'MRP', parseInt(e.target.value))}
                       required
                     />
+                      {error.MRP && (
+        <FormHelperText error>This field is required</FormHelperText>
+      )}
                   </TableCell>
                   <TableCell>
                     <TextField
