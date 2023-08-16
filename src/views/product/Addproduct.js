@@ -60,46 +60,53 @@ const SamplePage = () => {
 
   
   const [productCode, setProductCode] = useState({
+
     product_code: '',
     product_name: '',
     tax_code: '',
     HSN: ''
+
   });
 
 
 
   const [error, setError] = useState({
-    product_code: false,
-    product_name: false,
-    tax_code: false,
-    HSN: false
-  });
-  console.log(productCode, 88);
 
-  const onSubmit = (e) => {
-    e.preventDefault(); //this is used for from tag
-    setOn(false);
+    product_code:false,
+    product_name:false,
+    tax_code:false,
+   
+  });
+  console.log(product,88);
+ 
+  const onSubmit=(e)=>{
+    e.preventDefault();//this is used for from tag
+    setOn(false)
 
     const newError = {
       product_code: productCode.product_code === '',
       product_name: productCode.product_name === '',
       tax_code: productCode.tax_code === '',
-      HSN: productCode.HSN === ''
+
+     
     };
 
     setError(newError);
-    if (!newError.product_code && !newError.HSN && !newError.tax_code && !newError.product_name) {
-      Insert_Product(product)
-        .then((res) => {
-          console.log(res);
+    if (!newError.product_code&&!newError.tax_code&&!newError.product_name) {
+ Insert_Product(product)
+      .then((res)=>{
+        console.log(res)
 
-          if (res.data.copy) {
-            setOn(true);
-          }
-        })
-        .catch((error) => {
-          console.log('Error :' + error);
-        });
+
+        if(res.data.copy){
+          setOn(true)
+       
+        }
+      })
+  .catch((error)=>{
+  console.log("Error :"+ error)
+  })
+
     }
     // console.log();
   };

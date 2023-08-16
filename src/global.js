@@ -115,6 +115,11 @@ export const Update_Sales = (id) => {
     return url.put(`/api/update_sales/${id}`)
 }
 
+//Admin Registration
+export const Admin_Insert = (val)=>{
+    return url.post('/api/admin_register',val)
+}
+
 
 //Pay reciept
 export const Payment_Reciept_Insert=(val)=>{
@@ -122,6 +127,11 @@ export const Payment_Reciept_Insert=(val)=>{
 }
 export const Payment_Reciept_View = () =>{
     return url.get('/api/view_payment_reciept')
+}
+
+
+export const Admin_login = (val)=>{
+    return url.post('/api/admin_login',val)
 }
 
 

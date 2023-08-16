@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-
+import {Admin_login} from '../../../../global';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -43,7 +43,7 @@ const FirebaseLogin = ({ ...others }) => {
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const customization = useSelector((state) => state.customization);
   const [checked, setChecked] = useState(true);
-
+const [login,setLogin] = useState({})
   const googleHandler = async () => {
     console.error('Login');
   };
@@ -56,7 +56,27 @@ const FirebaseLogin = ({ ...others }) => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+const handleChange = (e) =>{
+  setLogin({...login,[e.target.name]:e.target.value})
+}
+const onSubmit=(e)=>{
+  e.preventDefault();
+  Admin_login(login)
+  .then((res)=>{
+    console.log(res)
+    if(res.data.success == true){
+      console.log("login Successfull")
+      localStorage.setItem("token",res.data.authtoken)
 
+    }else{
+      console.log("some error occured")
+    }
+  })
+  .catch((err)=>{
+    console.log("Error:"+err)
+  })
+}
+console.log(login)
   return (
     <>
       <Grid container direction="column" justifyContent="center" spacing={2}>
@@ -144,16 +164,16 @@ const FirebaseLogin = ({ ...others }) => {
           }
         }}
       >
-        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-          <form noValidate onSubmit={handleSubmit} {...others}>
+        {({ errors,  touched, values }) => (
+          <form noValidate  {...others}>
             <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
               <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
               <OutlinedInput
                 id="outlined-adornment-email-login"
                 type="email"
-                value={values.email}
+                
                 name="email"
-                onBlur={handleBlur}
+              
                 onChange={handleChange}
                 label="Email Address / Username"
                 inputProps={{}}
@@ -170,9 +190,9 @@ const FirebaseLogin = ({ ...others }) => {
               <OutlinedInput
                 id="outlined-adornment-password-login"
                 type={showPassword ? 'text' : 'password'}
-                value={values.password}
+             
                 name="password"
-                onBlur={handleBlur}
+          
                 onChange={handleChange}
                 endAdornment={
                   <InputAdornment position="end">
@@ -215,7 +235,7 @@ const FirebaseLogin = ({ ...others }) => {
 
             <Box sx={{ mt: 2 }}>
               <AnimateButton>
-                <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="secondary">
+                <Button  onClick={onSubmit} fullWidth size="large" type="submit" variant="contained" color="secondary">
                   Sign in
                 </Button>
               </AnimateButton>
